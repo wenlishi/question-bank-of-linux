@@ -31,7 +31,7 @@ def image_to_base64(image_path):
         return f"data:{mime_type};base64,{base64_str}"
 
 def main():
-    image_path = "data/pics/jinchengbiao.png"
+    image_path = "data/pics/wenjianshu.png"
 
     if not os.path.exists(image_path):
         print(f"错误：图片文件不存在: {image_path}")
