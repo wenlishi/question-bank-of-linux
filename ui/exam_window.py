@@ -1585,6 +1585,8 @@ class ExamWindow(QWidget):
         question_type = question.get('type', 'single_choice')
 
         if question_type == "single_choice":
+            if self.needs_image_display(question):
+                self.display_image_for_question(question, anchor_widget=self.question_label)
             # 单选题：单选按钮
             options = question.get('options', [])
             for i, option in enumerate(options):
@@ -3738,7 +3740,7 @@ class ExamWindow(QWidget):
     #         import traceback
     #         traceback.print_exc()
 
-    def display_image(self, image_filename, max_width=800, anchor_widget=None):
+    def display_image(self, image_filename, max_width=500, anchor_widget=None):
         """显示指定图片文件
         
         Args:

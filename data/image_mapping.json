@@ -2,7 +2,8 @@
   "image_mapping": {
     "q_053_062_image_parsed": "jinchengbiao.txt",
     "q_053_062_image_parsed_2": "jinchengbiao.png",
-    "q_053_062": "wenjianshu.txt"
+    "q_053_062": "wenjianshu.txt",
+    "q_007": "jincheng.txt"
   },
   "image_config": {
     "default_max_width": 800,
