@@ -381,3 +381,6 @@ Thumbs.db
 *.old
 *.orig
 *.save
+
+
+data/exams/*.json
