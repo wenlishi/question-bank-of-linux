@@ -1,0 +1,96 @@
+{
+  "questions": [
+    {
+      "type": "single_choice",
+      "category": "科目名称",
+      "question": "题目内容",
+      "options": ["选项A", "选项B", "选项C", "选项D"],
+      "answer": ["正确答案"],
+      "explanation": "题目解析",
+      "score": 1
+    },
+    {
+      "type": "single_choice",
+      "category": "科目名称",
+      "question": "题目内容",
+      "options": ["选项A", "选项B", "选项C", "选项D"],
+      "answer": ["正确答案"],
+      "explanation": "题目解析",
+      "score": 1
+    },
+    {
+      "type": "fill_blank",
+      "category": "科目名称",
+      "question": "题目内容______。",
+      "options": [],
+      "answer": ["答案"],
+      "explanation": "题目解析",
+      "score": 2
+    },
+    {
+      "type": "comprehensive",
+      "category": "科目名称",
+      "question": "综合题大题题干",
+      "sub_questions": [
+        {
+          "question": "第一小题内容______。",
+          "answer": ["第一小题答案"]
+        },
+        {
+          "question": "第二小题内容______。",
+          "answer": ["第二小题答案"]
+        },
+        {
+          "question": "第三小题内容______。",
+          "answer": ["第三小题答案"]
+        }
+      ],
+      "explanation": "综合题解析",
+      "score": 15
+    }
+  ],
+  "papers": [
+    {
+      "title": "试卷一：试卷标题",
+      "description": "试卷描述",
+      "time_limit": 60,
+      "total_score": 100,
+      "question_ids": [1, 2, 3, 4]
+    },
+    {
+      "title": "试卷二：试卷标题",
+      "description": "试卷描述",
+      "time_limit": 60,
+      "total_score": 100,
+      "question_ids": [5, 6, 7, 8]
+    },
+    {
+      "title": "试卷三：试卷标题",
+      "description": "试卷描述",
+      "time_limit": 60,
+      "total_score": 100,
+      "question_ids": [9, 10, 11, 12]
+    },
+    {
+      "title": "试卷四：试卷标题",
+      "description": "试卷描述",
+      "time_limit": 60,
+      "total_score": 100,
+      "question_ids": [13, 14, 15, 16]
+    },
+    {
+      "title": "试卷五：试卷标题",
+      "description": "试卷描述",
+      "time_limit": 60,
+      "total_score": 100,
+      "question_ids": [17, 18, 19, 20]
+    },
+    {
+      "title": "试卷六：试卷标题",
+      "description": "试卷描述",
+      "time_limit": 60,
+      "total_score": 100,
+      "question_ids": [21, 22, 23, 24]
+    }
+  ]
+}

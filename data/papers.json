@@ -1,0 +1,85 @@
+{
+  "papers": [
+    {
+      "id": 1,
+      "title": "试卷一：数学基础测试",
+      "description": "数学基础知识测试，包含基本运算和几何知识",
+      "time_limit": 60,
+      "total_score": 100,
+      "created": "2025-12-30T22:13:30.991081",
+      "updated": "2025-12-30T22:13:30.992612",
+      "question_ids": [
+        1,
+        2,
+        3
+      ],
+      "status": "active"
+    },
+    {
+      "id": 2,
+      "title": "试卷二：科学常识测试",
+      "description": "科学常识测试，包含化学、物理等基础知识",
+      "time_limit": 60,
+      "total_score": 100,
+      "created": "2025-12-30T22:13:30.993234",
+      "updated": "2025-12-30T22:13:30.994806",
+      "question_ids": [
+        4,
+        5,
+        6
+      ],
+      "status": "active"
+    },
+    {
+      "id": 3,
+      "title": "试卷三：语文知识测试",
+      "description": "语文知识测试，包含诗词、成语等",
+      "time_limit": 60,
+      "total_score": 100,
+      "created": "2025-12-30T22:13:30.995471",
+      "updated": "2025-12-30T22:13:30.996636",
+      "question_ids": [
+        7,
+        8
+      ],
+      "status": "active"
+    },
+    {
+      "id": 4,
+      "title": "试卷四：英语基础测试",
+      "description": "英语基础知识测试",
+      "time_limit": 60,
+      "total_score": 100,
+      "created": "2025-12-30T22:13:30.997396",
+      "updated": "2025-12-30T22:13:30.999225",
+      "question_ids": [
+        9,
+        10
+      ],
+      "status": "active"
+    },
+    {
+      "id": 5,
+      "title": "试卷五：历史知识测试",
+      "description": "中国历史知识测试",
+      "time_limit": 60,
+      "total_score": 100,
+      "created": "2025-12-30T22:13:31.000040",
+      "updated": "2025-12-30T22:13:31.000070",
+      "question_ids": [],
+      "status": "active"
+    },
+    {
+      "id": 6,
+      "title": "试卷六：地理知识测试",
+      "description": "中国地理知识测试",
+      "time_limit": 60,
+      "total_score": 100,
+      "created": "2025-12-30T22:13:31.001555",
+      "updated": "2025-12-30T22:13:31.001567",
+      "question_ids": [],
+      "status": "active"
+    }
+  ],
+  "next_paper_id": 7
+}

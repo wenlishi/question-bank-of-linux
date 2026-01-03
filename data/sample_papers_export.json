@@ -1,0 +1,251 @@
+{
+  "questions": [
+    {
+      "type": "single_choice",
+      "category": "数学",
+      "question": "1 + 1 等于多少？",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "answer": [
+        "2"
+      ],
+      "explanation": "基本的加法运算。",
+      "score": 5,
+      "id": 1,
+      "created": "2025-12-30T22:13:30.983012"
+    },
+    {
+      "type": "single_choice",
+      "category": "数学",
+      "question": "圆的周长公式是什么？",
+      "options": [
+        "πr",
+        "2πr",
+        "πr²",
+        "4πr²"
+      ],
+      "answer": [
+        "2πr"
+      ],
+      "explanation": "圆的周长公式是 2πr，其中 r 是半径。",
+      "score": 5,
+      "id": 2,
+      "created": "2025-12-30T22:13:30.983848"
+    },
+    {
+      "type": "fill_blank",
+      "category": "数学",
+      "question": "三角形的内角和是______度。",
+      "options": [],
+      "answer": [
+        "180"
+      ],
+      "explanation": "三角形的内角和总是180度。",
+      "score": 5,
+      "id": 3,
+      "created": "2025-12-30T22:13:30.984888"
+    },
+    {
+      "type": "single_choice",
+      "category": "科学",
+      "question": "水的化学式是什么？",
+      "options": [
+        "H2O",
+        "CO2",
+        "O2",
+        "H2"
+      ],
+      "answer": [
+        "H2O"
+      ],
+      "explanation": "水的化学式是 H₂O。",
+      "score": 5,
+      "id": 4,
+      "created": "2025-12-30T22:13:30.985583"
+    },
+    {
+      "type": "fill_blank",
+      "category": "语文",
+      "question": "《静夜思》的作者是______。",
+      "options": [],
+      "answer": [
+        "李白"
+      ],
+      "explanation": "《静夜思》是唐代诗人李白的作品。",
+      "score": 5,
+      "id": 5,
+      "created": "2025-12-30T22:13:30.986718"
+    },
+    {
+      "type": "single_choice",
+      "category": "语文",
+      "question": "以下哪个成语的意思是'形容非常危险'？",
+      "options": [
+        "一帆风顺",
+        "千钧一发",
+        "井井有条",
+        "心旷神怡"
+      ],
+      "answer": [
+        "千钧一发"
+      ],
+      "explanation": "千钧一发比喻情况万分危急。",
+      "score": 5,
+      "id": 6,
+      "created": "2025-12-30T22:13:30.987576"
+    },
+    {
+      "type": "single_choice",
+      "category": "英语",
+      "question": "'Apple'的中文意思是什么？",
+      "options": [
+        "苹果",
+        "香蕉",
+        "橘子",
+        "梨"
+      ],
+      "answer": [
+        "苹果"
+      ],
+      "explanation": "Apple 是苹果的英文。",
+      "score": 5,
+      "id": 7,
+      "created": "2025-12-30T22:13:30.988244"
+    },
+    {
+      "type": "fill_blank",
+      "category": "英语",
+      "question": "I ______ a student. (am/is/are)",
+      "options": [],
+      "answer": [
+        "am"
+      ],
+      "explanation": "第一人称单数用 am。",
+      "score": 5,
+      "id": 8,
+      "created": "2025-12-30T22:13:30.988909"
+    },
+    {
+      "type": "single_choice",
+      "category": "历史",
+      "question": "中国的第一个封建王朝是？",
+      "options": [
+        "夏朝",
+        "商朝",
+        "周朝",
+        "秦朝"
+      ],
+      "answer": [
+        "夏朝"
+      ],
+      "explanation": "夏朝是中国史书中记载的第一个世袭制朝代。",
+      "score": 5,
+      "id": 9,
+      "created": "2025-12-30T22:13:30.989419"
+    },
+    {
+      "type": "single_choice",
+      "category": "地理",
+      "question": "中国的首都是？",
+      "options": [
+        "上海",
+        "北京",
+        "广州",
+        "深圳"
+      ],
+      "answer": [
+        "北京"
+      ],
+      "explanation": "北京是中国的首都。",
+      "score": 5,
+      "id": 10,
+      "created": "2025-12-30T22:13:30.989979"
+    }
+  ],
+  "papers": [
+    {
+      "id": 1,
+      "title": "试卷一：数学基础测试",
+      "description": "数学基础知识测试，包含基本运算和几何知识",
+      "time_limit": 60,
+      "total_score": 100,
+      "created": "2025-12-30T22:13:30.991081",
+      "updated": "2025-12-30T22:13:30.992612",
+      "question_ids": [
+        1,
+        2,
+        3
+      ],
+      "status": "active"
+    },
+    {
+      "id": 2,
+      "title": "试卷二：科学常识测试",
+      "description": "科学常识测试，包含化学、物理等基础知识",
+      "time_limit": 60,
+      "total_score": 100,
+      "created": "2025-12-30T22:13:30.993234",
+      "updated": "2025-12-30T22:13:30.994806",
+      "question_ids": [
+        4,
+        5,
+        6
+      ],
+      "status": "active"
+    },
+    {
+      "id": 3,
+      "title": "试卷三：语文知识测试",
+      "description": "语文知识测试，包含诗词、成语等",
+      "time_limit": 60,
+      "total_score": 100,
+      "created": "2025-12-30T22:13:30.995471",
+      "updated": "2025-12-30T22:13:30.996636",
+      "question_ids": [
+        7,
+        8
+      ],
+      "status": "active"
+    },
+    {
+      "id": 4,
+      "title": "试卷四：英语基础测试",
+      "description": "英语基础知识测试",
+      "time_limit": 60,
+      "total_score": 100,
+      "created": "2025-12-30T22:13:30.997396",
+      "updated": "2025-12-30T22:13:30.999225",
+      "question_ids": [
+        9,
+        10
+      ],
+      "status": "active"
+    },
+    {
+      "id": 5,
+      "title": "试卷五：历史知识测试",
+      "description": "中国历史知识测试",
+      "time_limit": 60,
+      "total_score": 100,
+      "created": "2025-12-30T22:13:31.000040",
+      "updated": "2025-12-30T22:13:31.000070",
+      "question_ids": [],
+      "status": "active"
+    },
+    {
+      "id": 6,
+      "title": "试卷六：地理知识测试",
+      "description": "中国地理知识测试",
+      "time_limit": 60,
+      "total_score": 100,
+      "created": "2025-12-30T22:13:31.001555",
+      "updated": "2025-12-30T22:13:31.001567",
+      "question_ids": [],
+      "status": "active"
+    }
+  ]
+}

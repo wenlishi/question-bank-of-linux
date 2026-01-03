@@ -1,0 +1,383 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# poetry
+#poetry.lock
+
+# pdm
+.pdm.toml
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Qt/PyQt
+*.ui
+*.qrc
+*_rc.py
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# Linux
+*~
+
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
+
+# Session data
+*.session
+*.session.*
+
+# 项目特定的忽略文件
+# 数据文件（根据你的项目结构调整）
+data/sessions/*.json
+data/progress/*.json
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+
+# 用户数据和配置文件（包含敏感信息）
+data/activations.json
+data/user_progress.json
+data/user_stats.json
+data/papers.json  # 如果包含用户数据则忽略，如果是示例数据则保留
+
+# 考试数据文件
+# 保留现有6个示例考试（exam_001.json 到 exam_006.json）
+# 忽略未来用户可能添加的考试文件（exam_007.json 及以后）
+data/exams/exam_007.json
+data/exams/exam_008.json
+data/exams/exam_009.json
+data/exams/exam_010.json
+data/exams/exam_0[1-9][0-9].json
+data/exams/exam_[1-9][0-9][0-9].json
+
+# 敏感的商业文档（销售、价格、客户信息等）
+# 销售相关
+*销售*.md
+*售卖*.md
+*价格*.md
+*定价*.md
+*客户*.md
+*订单*.md
+*合同*.md
+*协议*.md
+
+# 财务相关
+*财务*.md
+*账单*.md
+*发票*.md
+*收款*.md
+*付款*.md
+
+# 商业机密
+*机密*.md
+*秘密*.md
+*内部*.md
+*商业计划*.md
+*战略*.md
+
+# 具体文件名（根据你的实际情况调整）
+销售价格表.md
+客户名单.md
+订单记录.md
+财务报告.md
+商业计划书.md
+合作协议.md
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+*.backup
+*.swp
+*.swo
+
+# 日志文件
+*.log
+logs/
+log/
+
+# 配置文件（包含敏感信息的）
+config.ini
+settings.ini
+secrets.ini
+*.env
+.env.local
+.env.*.local
+
+# 编译后的UI文件（如果需要重新编译）
+ui/*_ui.py
+
+# 构建输出
+build/
+dist/
+*.exe
+*.app
+*.dmg
+*.pkg
+
+# 测试相关
+test_output/
+test_results/
+.coverage
+htmlcov/
+
+# 文档生成
+docs/_build/
+docs/api/
+
+# 缓存目录
+.cache/
+.mypy_cache/
+.pytest_cache/
+__pycache__/
+
+# IDE特定文件
+# PyCharm
+.idea/
+*.iml
+out/
+# VS Code
+.vscode/
+*.code-workspace
+# Sublime Text
+*.sublime-*
+# Vim
+*.swp
+*.swo
+*~
+# Emacs
+*~
+\#*
+.\#*
+# Kate
+.*.kate-swp
+# Eclipse
+.settings/
+.metadata/
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.project
+.loadpath
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# 操作系统生成的文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 备份文件
+*.bak
+*.backup
+*.old
+*.orig
+*.save
