@@ -48,7 +48,7 @@ class ExamWindow(QWidget):
         2. 然后将允许的HTML标签恢复（将&lt;br&gt;恢复为<br>）
         """
         # 定义允许的HTML标签
-        allowed_tags = {'br', 'span', 'div', 'p', 'b', 'strong', 'i', 'em', 'u', 'code'}
+        allowed_tags = {'br', 'span', 'div', 'p', 'b', 'strong', 'i', 'em', 'u', 'code', 'img'}
 
         # 首先转义整个文本
         escaped = html.escape(text)
@@ -848,6 +848,662 @@ class ExamWindow(QWidget):
         print("=== 结束题目结构调试 ===\n")
 
 
+    # def show_question(self, index, item_index=0):
+    #     """显示指定索引的题目
+
+    #     Args:
+    #         index: 题目索引
+    #         item_index: 对于cloze_group类型，要聚焦的item索引（默认0）
+    #     """
+    #     if index < 0 or index >= len(self.questions):
+    #         return
+
+    #     self.current_question_index = index
+    #     self.current_item_index = item_index
+    #     question = self.questions[index]
+    #     question_id = question.get('id', f'q_{index+1}')
+
+    #     question_type = question.get('type', 'single_choice')
+
+    #     # 检查是否是cloze_group或comprehensive类型
+    #     is_cloze_group = question_type == "cloze_group"
+    #     is_comprehensive = question_type == "comprehensive"
+
+    #     if is_cloze_group or is_comprehensive:
+    #         # 对于cloze_group和comprehensive类型，不在题目左边显示题号
+    #         # 题号已经显示在题干中的______前面了
+    #         question_html = f"""
+    #         <div style="display: flex; align-items: flex-start; margin-bottom: 10px;">
+    #             <span style="
+    #                 font-size: 20px;
+    #                 line-height: 1.6;
+    #                 color: #212529;
+    #                 font-weight: 500;
+    #                 font-family: 'Microsoft YaHei';
+    #                 flex-grow: 1;
+    #             ">
+    #                 &nbsp;
+    #             </span>
+    #         </div>
+    #         """
+    #     else:
+    #         # 其他题型：转义HTML特殊字符并显示题号在题目左边
+    #         # 首先转义HTML特殊字符
+    #         question_text = html.escape(question['question'])
+    #         # 将换行符转换为HTML换行标签
+    #         question_text = question_text.replace('\n', '<br>')
+    #         question_number = question.get('question_number', index + 1)
+    #         question_html = f"""
+    #         <div style="display: flex; align-items: flex-start; margin-bottom: 10px;">
+    #             <span style="
+    #                 color: #007bff;
+    #                 font-size: 20px;
+    #                 font-weight: bold;
+    #                 font-family: 'Microsoft YaHei';
+    #                 margin-right: 10px;
+    #                 min-width: 30px;
+    #             ">
+    #                 {question_number}.
+    #             </span>
+    #             <span style="
+    #                 font-size: 20px;
+    #                 line-height: 1.6;
+    #                 color: #212529;
+    #                 font-weight: 500;
+    #                 font-family: 'Microsoft YaHei';
+    #                 flex-grow: 1;
+    #             ">
+    #                 {question_text}
+    #             </span>
+    #         </div>
+    #         """
+    #     self.question_label.setText(question_html)
+
+    #     # 清除之前的选项
+    #     while self.options_layout.count():
+    #         child = self.options_layout.takeAt(0)
+    #         if child.widget():
+    #             child.widget().deleteLater()
+
+    #     # 根据题型创建不同的输入部件
+    #     question_type = question.get('type', 'single_choice')
+
+    #     if question_type == "single_choice":
+    #         # 单选题：单选按钮
+    #         options = question.get('options', [])
+    #         for i, option in enumerate(options):
+    #             # 选项已经包含字母前缀（如 "A.程序"），显示时只显示内容部分
+    #             # 分割字母前缀和内容（如 "A.程序" -> "程序"）
+    #             if '.' in option:
+    #                 display_text = option.split('.', 1)[1].strip()
+    #             else:
+    #                 display_text = option
+    #             # 处理&符号，在Qt中&需要转义为&&
+    #             display_text_escaped = display_text.replace('&', '&&')
+    #             radio = QRadioButton(f"{chr(65 + i)}. {display_text_escaped}")
+    #             radio.setStyleSheet("""
+    #                 QRadioButton {
+    #                     font-size: 18px;
+    #                     font-family: "Microsoft YaHei";
+    #                     padding: 12px;
+    #                     border-radius: 5px;
+    #                     min-height: 35px;
+    #                 }
+    #                 QRadioButton:hover {
+    #                     background-color: #f8f9fa;
+    #                 }
+    #             """)
+    #             self.options_layout.addWidget(radio)
+    #             self.options_group.addButton(radio, i)
+
+    #             # 如果用户之前选择过这个选项，设置为选中并恢复颜色
+    #             if question_id in self.user_answers:
+    #                 user_answer = self.user_answers[question_id]
+    #                 if isinstance(user_answer, list) and len(user_answer) > 0:
+    #                     if user_answer[0] == option:
+    #                         radio.setChecked(True)
+    #                         # 检查答案是否正确并设置颜色
+    #                         is_correct, _, _, _ = self.question_manager.check_answer(question, user_answer)
+    #                         if is_correct:
+    #                             # 正确 - 绿色
+    #                             radio.setStyleSheet("""
+    #                                 QRadioButton {
+    #                                     font-size: 18px;
+    #                                     font-family: "Microsoft YaHei";
+    #                                     padding: 12px;
+    #                                     border-radius: 5px;
+    #                                     min-height: 35px;
+    #                                     color: #28a745;
+    #                                     font-weight: bold;
+    #                                 }
+    #                                 QRadioButton:hover {
+    #                                     background-color: #f8f9fa;
+    #                                 }
+    #                             """)
+    #                         else:
+    #                             # 错误 - 红色
+    #                             radio.setStyleSheet("""
+    #                                 QRadioButton {
+    #                                     font-size: 18px;
+    #                                     font-family: "Microsoft YaHei";
+    #                                     padding: 12px;
+    #                                     border-radius: 5px;
+    #                                     min-height: 35px;
+    #                                     color: #dc3545;
+    #                                     font-weight: bold;
+    #                                 }
+    #                                 QRadioButton:hover {
+    #                                     background-color: #f8f9fa;
+    #                                 }
+    #                             """)
+
+    #             # 为单选按钮添加点击事件，选择后立即显示答案和解析
+    #             radio.clicked.connect(lambda checked, q=question, opt=option: self.on_single_choice_selected(q, opt))
+
+    #     elif question_type == "fill_blank":
+    #         # 填空题：支持多空题目
+    #         question_text = question['question']
+
+    #         # 检查是否是从cloze_group拆分出来的填空题
+    #         is_cloze_derived = 'original_cloze_id' in question
+
+    #         if is_cloze_derived:
+    #             # 从cloze_group拆分出来的填空题：在输入框左边显示题号
+    #             question_number = question.get('question_number', 1)
+
+    #             # 创建空位标签和输入框的容器
+    #             blank_widget = QWidget()
+    #             blank_layout = QHBoxLayout(blank_widget)
+    #             blank_layout.setContentsMargins(0, 0, 0, 0)
+    #             blank_layout.setSpacing(10)
+
+    #             # 空位标签：显示题号（如48、49）
+    #             blank_label_text = f"{question_number}."
+    #             blank_label = QLabel(blank_label_text)
+    #             blank_label.setStyleSheet("""
+    #                 QLabel {
+    #                     font-size: 18px;
+    #                     font-family: "Microsoft YaHei";
+    #                     font-weight: bold;
+    #                     color: #007bff;
+    #                     min-width: 40px;
+    #                 }
+    #             """)
+    #             blank_layout.addWidget(blank_label)
+
+    #             # 输入框
+    #             input_field = QLineEdit()
+    #             input_field.setPlaceholderText(f"请输入答案")
+    #             input_field.setStyleSheet("""
+    #                 QLineEdit {
+    #                     font-size: 18px;
+    #                     font-family: "Microsoft YaHei";
+    #                     padding: 12px;
+    #                     border: 1px solid #dee2e6;
+    #                     border-radius: 5px;
+    #                     min-height: 35px;
+    #                 }
+    #                 QLineEdit:focus {
+    #                     border-color: #007bff;
+    #                 }
+    #             """)
+
+    #             # 如果用户之前填写过答案，设置为已填内容并恢复颜色
+    #             if question_id in self.user_answers:
+    #                 user_answer = self.user_answers[question_id]
+    #                 if isinstance(user_answer, list) and len(user_answer) > 0:
+    #                     input_field.setText(user_answer[0])
+    #                     # 检查答案是否正确并设置颜色
+    #                     if user_answer[0].strip():  # 只处理非空答案
+    #                         is_correct, _, item_correctness, _ = self.question_manager.check_answer(question, user_answer)
+    #                         if len(item_correctness) > 0:
+    #                             is_item_correct = item_correctness[0]
+    #                             # 使用统一的颜色设置方法
+    #                             self.update_input_field_color(question_id, 0, is_item_correct)
+
+    #             # 为输入框添加失去焦点事件（用户完成输入）
+    #             input_field.editingFinished.connect(lambda q_id=question_id, idx=0, field=input_field: self.on_fill_blank_finished(q_id, idx, field))
+
+    #             blank_layout.addWidget(input_field, 1)  # 设置拉伸因子
+    #             self.options_layout.addWidget(blank_widget)
+    #         else:
+    #             # 普通填空题
+    #             # 统计题目中的空位数量（通过______的数量）
+    #             blank_count = question_text.count('______')
+
+    #             if blank_count > 1:
+    #                 # 多空填空题：为每个空创建输入框
+    #                 for i in range(blank_count):
+    #                     # 创建空位标签和输入框的容器
+    #                     blank_widget = QWidget()
+    #                     blank_layout = QHBoxLayout(blank_widget)
+    #                     blank_layout.setContentsMargins(0, 0, 0, 0)
+    #                     blank_layout.setSpacing(10)
+
+    #                     # 空位标签（如【1】、【2】或根据题目中的编号）
+    #                     # 尝试从题目中提取空位编号（如47______、48______）
+    #                     import re
+    #                     blank_num_match = re.findall(r'(\d+)______', question_text)
+    #                     if i < len(blank_num_match):
+    #                         blank_label_text = f"【{blank_num_match[i]}】"
+    #                     else:
+    #                         blank_label_text = f"【{i+1}】"
+
+    #                     blank_label = QLabel(blank_label_text)
+    #                     blank_label.setStyleSheet("""
+    #                         QLabel {
+    #                             font-size: 18px;
+    #                             font-family: "Microsoft YaHei";
+    #                             font-weight: bold;
+    #                             color: #007bff;
+    #                             min-width: 40px;
+    #                         }
+    #                     """)
+    #                     blank_layout.addWidget(blank_label)
+
+    #                     # 输入框
+    #                     input_field = QLineEdit()
+    #                     input_field.setPlaceholderText(f"请输入答案")
+    #                     input_field.setStyleSheet("""
+    #                         QLineEdit {
+    #                             font-size: 18px;
+    #                             font-family: "Microsoft YaHei";
+    #                             padding: 12px;
+    #                             border: 1px solid #dee2e6;
+    #                             border-radius: 5px;
+    #                             min-height: 35px;
+    #                         }
+    #                         QLineEdit:focus {
+    #                             border-color: #007bff;
+    #                         }
+    #                     """)
+
+    #                     # 如果用户之前填写过答案，设置为已填内容并恢复颜色
+    #                     if question_id in self.user_answers:
+    #                         user_answer = self.user_answers[question_id]
+    #                         if isinstance(user_answer, list) and i < len(user_answer):
+    #                             input_field.setText(user_answer[i])
+    #                             # 检查答案是否正确并设置颜色
+    #                             if user_answer[i].strip():  # 只处理非空答案
+    #                                 is_correct, _, item_correctness, _ = self.question_manager.check_answer(question, user_answer)
+    #                                 if i < len(item_correctness):
+    #                                     is_item_correct = item_correctness[i]
+    #                                     # 使用统一的颜色设置方法
+    #                                     self.update_input_field_color(question_id, i, is_item_correct)
+
+    #                     # 为输入框添加失去焦点事件（用户完成输入）
+    #                     input_field.editingFinished.connect(lambda q_id=question_id, idx=i, field=input_field: self.on_fill_blank_finished(q_id, idx, field))
+
+    #                     blank_layout.addWidget(input_field, 1)  # 设置拉伸因子
+    #                     self.options_layout.addWidget(blank_widget)
+    #             else:
+    #                 # 单空填空题：单个输入框
+    #                 input_field = QLineEdit()
+    #                 input_field.setPlaceholderText("请输入答案")
+    #                 input_field.setStyleSheet("""
+    #                     QLineEdit {
+    #                         font-size: 18px;
+    #                         font-family: "Microsoft YaHei";
+    #                         padding: 12px;
+    #                         border: 1px solid #dee2e6;
+    #                         border-radius: 5px;
+    #                         min-height: 35px;
+    #                     }
+    #                     QLineEdit:focus {
+    #                         border-color: #007bff;
+    #                     }
+    #                 """)
+
+    #                 # 如果用户之前填写过答案，设置为已填内容并恢复颜色
+    #                 if question_id in self.user_answers:
+    #                     user_answer = self.user_answers[question_id]
+    #                     if isinstance(user_answer, list) and len(user_answer) > 0:
+    #                         input_field.setText(user_answer[0])
+    #                         # 检查答案是否正确并设置颜色
+    #                         if user_answer[0].strip():  # 只处理非空答案
+    #                             is_correct, _, item_correctness, _ = self.question_manager.check_answer(question, user_answer)
+    #                             if len(item_correctness) > 0:
+    #                                 is_item_correct = item_correctness[0]
+    #                                 # 使用统一的颜色设置方法
+    #                                 self.update_input_field_color(question_id, 0, is_item_correct)
+
+    #                 # 为输入框添加失去焦点事件（用户完成输入）
+    #                 input_field.editingFinished.connect(lambda q_id=question_id, idx=0, field=input_field: self.on_fill_blank_finished(q_id, idx, field))
+
+    #                 self.options_layout.addWidget(input_field)
+
+    #     elif question_type == "cloze_group":
+    #         # 完形填空组：多个空显示在一起
+    #         items = question.get('items', [])
+    #         question_text = question['question']
+    #         analysis = question.get('analysis', '')
+
+    #         # 修改题干：在每个______前加上对应的蓝色题号
+    #         # 例如："用______命令增加，用______命令减少"
+    #         #  -> "用<span style='color: #007bff; font-weight: bold;'>48.</span>______命令增加，用<span style='color: #007bff; font-weight: bold;'>49.</span>______命令减少"
+    #         modified_question_text = question_text
+    #         parts = modified_question_text.split('______')
+
+    #         # 获取题号（第一个空的题号）
+    #         # 从第一个item的metadata中获取题号
+    #         first_question_number = 1
+    #         if items and len(items) > 0:
+    #             first_item = items[0]
+    #             if 'metadata' in first_item and 'question_number' in first_item['metadata']:
+    #                 first_question_number = first_item['metadata']['question_number']
+
+    #         # 在每个______前加上对应的题号
+    #         for i in range(len(parts) - 1):  # 最后一个部分后面没有______
+    #             current_question_number = first_question_number + i
+    #             parts[i] = parts[i] + f"<span style='color: #007bff; font-weight: bold;'>{current_question_number}.</span>"
+
+    #         modified_question_text = '______'.join(parts)
+
+    #         # 显示修改后的题干
+    #         question_label = QLabel(modified_question_text)
+    #         question_label.setStyleSheet("""
+    #             QLabel {
+    #                 font-size: 18px;
+    #                 font-family: "Microsoft YaHei";
+    #                 line-height: 1.6;
+    #                 color: #212529;
+    #                 font-weight: 500;
+    #                 margin-bottom: 20px;
+    #             }
+    #         """)
+    #         question_label.setWordWrap(True)
+    #         self.options_layout.addWidget(question_label)
+
+    #         # 为每个空创建输入框（显示在一起）
+    #         for i, item in enumerate(items):
+    #             item_id = item.get('id', '')
+    #             item_index = item.get('index', 1)
+    #             item_score = item.get('score', 1)
+    #             current_question_number = first_question_number + i
+
+    #             # 创建空位标签和输入框的容器
+    #             blank_widget = QWidget()
+    #             blank_layout = QHBoxLayout(blank_widget)
+    #             blank_layout.setContentsMargins(0, 0, 0, 0)
+    #             blank_layout.setSpacing(10)
+
+    #             # 空位标签：显示题号（如48、49）
+    #             blank_label_text = f"{current_question_number}."
+    #             blank_label = QLabel(blank_label_text)
+    #             blank_label.setStyleSheet("""
+    #                 QLabel {
+    #                     font-size: 18px;
+    #                     font-family: "Microsoft YaHei";
+    #                     font-weight: bold;
+    #                     color: #007bff;
+    #                     min-width: 40px;
+    #                 }
+    #             """)
+    #             blank_layout.addWidget(blank_label)
+
+    #             # 输入框
+    #             input_field = QLineEdit()
+    #             input_field.setPlaceholderText(f"请输入答案")
+    #             input_field.setStyleSheet("""
+    #                 QLineEdit {
+    #                     font-size: 18px;
+    #                     font-family: "Microsoft YaHei";
+    #                     padding: 12px;
+    #                     border: 1px solid #dee2e6;
+    #                     border-radius: 5px;
+    #                     min-height: 35px;
+    #                 }
+    #                 QLineEdit:focus {
+    #                     border-color: #007bff;
+    #                 }
+    #             """)
+
+    #             # 如果用户之前填写过答案，设置为已填内容
+    #             if question_id in self.user_answers:
+    #                 user_answer = self.user_answers[question_id]
+    #                 if isinstance(user_answer, list) and i < len(user_answer):
+    #                     input_field.setText(user_answer[i])
+
+    #             # 为输入框添加文本变化事件（实时保存答案）
+    #             input_field.textChanged.connect(lambda text, q_id=question_id, idx=i: self.on_cloze_text_changed(q_id, idx, text))
+    #             # 为输入框添加失去焦点事件（检查是否所有空都填完）
+    #             input_field.editingFinished.connect(lambda q_id=question_id, idx=i, field=input_field: self.on_cloze_finished(q_id, idx, field))
+
+    #             blank_layout.addWidget(input_field, 1)  # 设置拉伸因子
+    #             self.options_layout.addWidget(blank_widget)
+
+    #     elif question_type == "comprehensive":
+    #         # 综合题：使用items格式，类似cloze_group
+    #         items = question.get('items', [])
+    #         if not items:
+    #             error_label = QLabel("综合题格式错误：缺少items")
+    #             error_label.setStyleSheet("""
+    #                 QLabel {
+    #                     color: red;
+    #                     font-size: 16px;
+    #                 }
+    #             """)
+    #             self.options_layout.addWidget(error_label)
+    #             return
+
+    #         question_text = question['question']
+    #         analysis = question.get('analysis', '')
+
+    #         # 显示题干（包含占位符）
+    #         question_label = QLabel()
+    #         question_label.setTextFormat(Qt.RichText)
+    #         # 将题干中的占位符格式化为更明显的样式
+    #         # 首先转义HTML特殊字符
+    #         escaped_question = html.escape(question_text)
+    #         # 将 (52)______________ 替换为带样式的占位符
+    #         import re
+    #         formatted_question = re.sub(r'\((\d+)\)_{5,}',
+    #                                   r'<span style="color: #007bff; font-weight: bold;">\1.</span>______',
+    #                                   escaped_question)
+    #         # 将换行符转换为HTML换行（需要在转义后处理）
+    #         formatted_question = formatted_question.replace('\n', '<br>')
+    #         question_label.setText(formatted_question)
+    #         question_label.setStyleSheet("""
+    #             QLabel {
+    #                 font-size: 18px;
+    #                 font-family: "Microsoft YaHei";
+    #                 line-height: 1.6;
+    #                 padding: 0px 0 10px 0;  /* 上边距减少，让题干稍微往上一点 */
+    #                 margin-top: -20px;       /* 负边距进一步往上移动 */
+    #             }
+    #         """)
+    #         question_label.setWordWrap(True)
+    #         self.options_layout.addWidget(question_label)
+
+    #         # 检查是否需要显示图片
+    #         if self.needs_image_display(question):
+    #             # 显示对应的图片
+    #             self.display_image_for_question(question, question_label)
+
+    #         # 为每个空创建输入框（水平排列，类似cloze_group）
+    #         for i, item in enumerate(items):
+    #             item_id = item.get('id', '')
+    #             item_index = item.get('index', i + 1)
+    #             item_score = item.get('score', 1)
+
+    #             # 创建空位标签和输入框的容器
+    #             blank_widget = QWidget()
+    #             blank_layout = QHBoxLayout(blank_widget)
+    #             blank_layout.setContentsMargins(0, 0, 0, 0)
+    #             blank_layout.setSpacing(10)
+
+    #             # 空位标签：显示题号（如52、53）
+    #             blank_label_text = f"{item_index}."
+    #             blank_label = QLabel(blank_label_text)
+    #             blank_label.setStyleSheet("""
+    #                 QLabel {
+    #                     font-size: 18px;
+    #                     font-family: "Microsoft YaHei";
+    #                     font-weight: bold;
+    #                     color: #007bff;
+    #                     min-width: 40px;
+    #                 }
+    #             """)
+    #             blank_layout.addWidget(blank_label)
+
+    #             # 输入框
+    #             input_field = QLineEdit()
+    #             input_field.setPlaceholderText(f"请输入答案")
+    #             input_field.setStyleSheet("""
+    #                 QLineEdit {
+    #                     font-size: 18px;
+    #                     font-family: "Microsoft YaHei";
+    #                     padding: 12px;
+    #                     border: 1px solid #dee2e6;
+    #                     border-radius: 5px;
+    #                     min-height: 35px;
+    #                 }
+    #                 QLineEdit:focus {
+    #                     border-color: #007bff;
+    #                 }
+    #             """)
+
+    #             # 如果用户之前填写过答案，设置为已填内容
+    #             if question_id in self.user_answers:
+    #                 user_answer = self.user_answers[question_id]
+    #                 if isinstance(user_answer, list) and i < len(user_answer):
+    #                     input_field.setText(user_answer[i])
+
+    #             # 为输入框添加文本变化事件（实时保存答案）
+    #             input_field.textChanged.connect(lambda text, q_id=question_id, idx=i: self.on_cloze_text_changed(q_id, idx, text))
+    #             # 为输入框添加失去焦点事件（检查是否所有空都填完）
+    #             input_field.editingFinished.connect(lambda q_id=question_id, idx=i, field=input_field: self.on_cloze_finished(q_id, idx, field))
+
+    #             blank_layout.addWidget(input_field, 1)  # 设置拉伸因子
+    #             self.options_layout.addWidget(blank_widget)
+
+    #     # 更新解析内容
+    #     question_text = question['question']
+
+    #     # 初始化变量
+    #     answer_text = "暂无正确答案"
+
+    #     if question_type == "cloze_group":
+    #         # 完形填空组：从items中获取正确答案
+    #         items = question.get('items', [])
+    #         # 对于cloze_group类型，从第一个item的metadata中获取题号
+    #         first_question_number = 1
+    #         if items and len(items) > 0:
+    #             first_item = items[0]
+    #             if 'metadata' in first_item and 'question_number' in first_item['metadata']:
+    #                 first_question_number = first_item['metadata']['question_number']
+    #             else:
+    #                 # 如果metadata中没有question_number，使用默认值1
+    #                 first_question_number = 1
+
+    #         answer_parts = []
+    #         for i, item in enumerate(items):
+    #             item_answer = item.get('answer', '')
+    #             current_question_number = first_question_number + i
+    #             answer_parts.append(f"{current_question_number}. {item_answer}")
+
+    #         # 使用HTML换行标签实现多行显示
+    #         answer_text = "<br>".join(answer_parts)
+
+    #     elif question_type == "fill_blank":
+    #         correct_answer = question.get('answer', [])
+    #         # 填空题：特殊处理多空题目
+    #         blank_count = question_text.count('______')
+
+    #         if blank_count > 1:
+    #             # 多空填空题：显示每个空的正确答案
+    #             import re
+    #             blank_num_match = re.findall(r'(\d+)______', question_text)
+
+    #             if isinstance(correct_answer, list):
+    #                 answer_parts = []
+    #                 for i, ans in enumerate(correct_answer):
+    #                     if i < len(blank_num_match):
+    #                         # 使用题目中的编号（如47、48）
+    #                         answer_parts.append(f"【{blank_num_match[i]}】{ans}")
+    #                     else:
+    #                         # 使用顺序编号
+    #                         answer_parts.append(f"【{i+1}】{ans}")
+    #                 # 使用HTML换行标签实现多行显示
+    #                 answer_text = "<br>".join(answer_parts)
+    #             else:
+    #                 answer_text = str(correct_answer)
+    #         else:
+    #             # 单空填空题
+    #             if isinstance(correct_answer, list) and len(correct_answer) > 0:
+    #                 answer_text = correct_answer[0]
+    #             else:
+    #                 answer_text = str(correct_answer)
+    #     elif question_type == "single_choice":
+    #         # 单选题：显示完整的选项文本
+    #         correct_answer = question.get('answer', [])
+    #         if isinstance(correct_answer, list):
+    #             answer_parts = []
+    #             for ans in correct_answer:
+    #                 # 显示完整的选项文本，如 "C.资源"
+    #                 answer_parts.append(ans)
+    #             answer_text = "，".join(answer_parts)
+    #         else:
+    #             answer_text = str(correct_answer)
+    #     elif question_type == "comprehensive":
+    #         # 综合题：从items中获取正确答案，使用多行显示
+    #         items = question.get('items', [])
+    #         answer_parts = []
+    #         for i, item in enumerate(items):
+    #             item_answer = item.get('answer', '')
+    #             # 综合题通常有题号，如52、53等
+    #             item_index = item.get('index', i + 1)
+    #             answer_parts.append(f"{item_index}. {item_answer}")
+    #         # 使用HTML换行标签实现多行显示
+    #         answer_text = "<br>".join(answer_parts)
+    #     else:
+    #         # 其他题型
+    #         correct_answer = question.get('answer', [])
+    #         if isinstance(correct_answer, list):
+    #             answer_text = "，".join(correct_answer)
+    #         else:
+    #             answer_text = str(correct_answer)
+
+    #     # 正确答案需要智能处理HTML特殊字符
+    #     # 保留合法的HTML标签（如<br>），转义像<Ctrl>这样的文本
+    #     answer_text_escaped = self.smart_escape(answer_text)
+    #     self.correct_answer_label.setText(f"正确答案：{answer_text_escaped}")
+
+    #     # 解析部分不需要处理&符号，可以正常显示
+    #     analysis_text = question.get('analysis', '暂无解析')
+    #     self.analysis_label.setText(analysis_text)
+
+    #     # 保存要聚焦的item索引
+    #     self.current_item_index = item_index
+
+    #     # 更新导航按钮状态
+    #     self.update_navigation_buttons()
+
+    #     # 更新题型按钮
+    #     self.update_type_buttons(question_type)
+
+    #     # 检查题目是否已答，如果已答则显示解析
+    #     question_id = question.get('id', f'q_{self.current_question_index+1}')
+    #     is_answered = question_id in self.user_answers and any(self.user_answers[question_id])
+
+    #     if is_answered:
+    #         # 题目已答，显示解析
+    #         self.analysis_frame.setVisible(True)
+    #         self.toggle_analysis_btn.setChecked(True)
+    #         self.toggle_analysis_btn.setText("📖 隐藏解析")
+    #     else:
+    #         # 题目未答，隐藏解析
+    #         self.analysis_frame.setVisible(False)
+    #         self.toggle_analysis_btn.setChecked(False)
+    #         self.toggle_analysis_btn.setText("📖 显示解析")
+
+    #     # 使用定时器延迟聚焦和恢复颜色，确保输入框已经创建
+    #     from PyQt5.QtCore import QTimer
+    #     if is_answered:
+    #         # 延迟恢复颜色，确保输入框已经创建
+    #         QTimer.singleShot(150, lambda: self.restore_input_field_colors(question, question_id))
+    #     # 聚焦到当前输入框
+    #     QTimer.singleShot(100, self.focus_current_item)
     def show_question(self, index, item_index=0):
         """显示指定索引的题目
 
@@ -1277,99 +1933,130 @@ class ExamWindow(QWidget):
             items = question.get('items', [])
             if not items:
                 error_label = QLabel("综合题格式错误：缺少items")
-                error_label.setStyleSheet("""
-                    QLabel {
-                        color: red;
-                        font-size: 16px;
-                    }
-                """)
+                error_label.setStyleSheet("color: red; font-size: 16px;")
                 self.options_layout.addWidget(error_label)
                 return
 
             question_text = question['question']
-            analysis = question.get('analysis', '')
+            
+            # --- 核心修改开始：智能切割文本 (优先支持 '图片见下方') ---
+            
+            # 1. 定义可能的分割标记 (按优先级排序)
+            potential_markers = [
+                "（图片见下方）", 
+                "(图片见下方)", 
+                "图片见下方", 
+                "（进程列表略）", 
+                "(进程列表略)"
+            ]
+            
+            split_marker = None
+            for marker in potential_markers:
+                if marker in question_text:
+                    split_marker = marker
+                    break # 找到第一个匹配的就停止
 
-            # 显示题干（包含占位符）
-            question_label = QLabel()
-            question_label.setTextFormat(Qt.RichText)
-            # 将题干中的占位符格式化为更明显的样式
-            # 首先转义HTML特殊字符
-            escaped_question = html.escape(question_text)
-            # 将 (52)______________ 替换为带样式的占位符
-            import re
-            formatted_question = re.sub(r'\((\d+)\)_{5,}',
-                                      r'<span style="color: #007bff; font-weight: bold;">\1.</span>______',
-                                      escaped_question)
-            # 将换行符转换为HTML换行（需要在转义后处理）
-            formatted_question = formatted_question.replace('\n', '<br>')
-            question_label.setText(formatted_question)
-            question_label.setStyleSheet("""
-                QLabel {
-                    font-size: 18px;
-                    font-family: "Microsoft YaHei";
-                    line-height: 1.6;
-                    padding: 0px 0 10px 0;  /* 上边距减少，让题干稍微往上一点 */
-                    margin-top: -20px;       /* 负边距进一步往上移动 */
-                }
-            """)
-            question_label.setWordWrap(True)
-            self.options_layout.addWidget(question_label)
+            # 2. 检查是否找到标记且需要显示图片
+            if split_marker and self.needs_image_display(question):
+                # --- 执行切割逻辑 ---
+                # 计算切割点：文本应当在标记之后断开
+                split_index = question_text.find(split_marker) + len(split_marker)
+                
+                text_part1 = question_text[:split_index] # 上半部分（包含标记）
+                text_part2 = question_text[split_index:] # 下半部分
+
+                # A. 处理并显示【上半部分】
+                label1 = QLabel()
+                label1.setTextFormat(Qt.RichText)
+                # 格式化占位符
+                import re
+                escaped_text1 = html.escape(text_part1)
+                formatted_text1 = re.sub(r'\((\d+)\)_{5,}', r'<span style="color: #007bff; font-weight: bold;">\1.</span>______', escaped_text1)
+                formatted_text1 = formatted_text1.replace('\n', '<br>')
+                label1.setText(formatted_text1)
+                label1.setStyleSheet("QLabel { font-size: 18px; font-family: 'Microsoft YaHei'; line-height: 1.6; margin-top: -10px; }")
+                label1.setWordWrap(True)
+                self.options_layout.addWidget(label1)
+
+                # B. 显示【图片】（插入到 label1 后面）
+                # 这里会调用 display_image，使用 insertWidget 将图片放在 label1 下方
+                self.display_image_for_question(question, anchor_widget=label1)
+
+                # C. 处理并显示【下半部分】（如果有内容）
+                if text_part2.strip():
+                    label2 = QLabel()
+                    label2.setTextFormat(Qt.RichText)
+                    escaped_text2 = html.escape(text_part2)
+                    formatted_text2 = re.sub(r'\((\d+)\)_{5,}', r'<span style="color: #007bff; font-weight: bold;">\1.</span>______', escaped_text2)
+                    formatted_text2 = formatted_text2.replace('\n', '<br>')
+                    label2.setText(formatted_text2)
+                    # 给下半部分加一点上边距，和图片隔开
+                    label2.setStyleSheet("QLabel { font-size: 18px; font-family: 'Microsoft YaHei'; line-height: 1.6; margin-top: 10px; }")
+                    label2.setWordWrap(True)
+                    self.options_layout.addWidget(label2)
+            
+            else:
+                # --- 兜底逻辑：如果找不到切割标记，或者不需要图片 ---
+                question_label = QLabel()
+                question_label.setTextFormat(Qt.RichText)
+                escaped_question = html.escape(question_text)
+                import re
+                formatted_question = re.sub(r'\((\d+)\)_{5,}', r'<span style="color: #007bff; font-weight: bold;">\1.</span>______', escaped_question)
+                formatted_question = formatted_question.replace('\n', '<br>')
+                question_label.setText(formatted_question)
+                question_label.setStyleSheet("""
+                    QLabel {
+                        font-size: 18px;
+                        font-family: "Microsoft YaHei";
+                        line-height: 1.6;
+                        padding: 0px 0 10px 0;
+                        margin-top: -20px;
+                    }
+                """)
+                question_label.setWordWrap(True)
+                self.options_layout.addWidget(question_label)
+
+                # 如果需要显示图片但没找到切割点，就显示在最后
+                if self.needs_image_display(question):
+                    self.display_image_for_question(question, anchor_widget=question_label)
+            
+            # --- 核心修改结束 ---
 
             # 为每个空创建输入框（水平排列，类似cloze_group）
             for i, item in enumerate(items):
-                item_id = item.get('id', '')
                 item_index = item.get('index', i + 1)
-                item_score = item.get('score', 1)
-
+                
                 # 创建空位标签和输入框的容器
                 blank_widget = QWidget()
                 blank_layout = QHBoxLayout(blank_widget)
                 blank_layout.setContentsMargins(0, 0, 0, 0)
                 blank_layout.setSpacing(10)
 
-                # 空位标签：显示题号（如52、53）
-                blank_label_text = f"{item_index}."
-                blank_label = QLabel(blank_label_text)
-                blank_label.setStyleSheet("""
-                    QLabel {
-                        font-size: 18px;
-                        font-family: "Microsoft YaHei";
-                        font-weight: bold;
-                        color: #007bff;
-                        min-width: 40px;
-                    }
-                """)
+                # 空位标签
+                blank_label = QLabel(f"{item_index}.")
+                blank_label.setStyleSheet("QLabel { font-size: 18px; font-family: 'Microsoft YaHei'; font-weight: bold; color: #007bff; min-width: 40px; }")
                 blank_layout.addWidget(blank_label)
 
                 # 输入框
                 input_field = QLineEdit()
                 input_field.setPlaceholderText(f"请输入答案")
                 input_field.setStyleSheet("""
-                    QLineEdit {
-                        font-size: 18px;
-                        font-family: "Microsoft YaHei";
-                        padding: 12px;
-                        border: 1px solid #dee2e6;
-                        border-radius: 5px;
-                        min-height: 35px;
-                    }
-                    QLineEdit:focus {
-                        border-color: #007bff;
-                    }
+                    QLineEdit { font-size: 18px; font-family: "Microsoft YaHei"; padding: 12px; border: 1px solid #dee2e6; border-radius: 5px; min-height: 35px; }
+                    QLineEdit:focus { border-color: #007bff; }
                 """)
 
-                # 如果用户之前填写过答案，设置为已填内容
+                # 恢复答案逻辑
+                question_id = question.get('id', f'q_{self.current_question_index+1}')
                 if question_id in self.user_answers:
                     user_answer = self.user_answers[question_id]
                     if isinstance(user_answer, list) and i < len(user_answer):
                         input_field.setText(user_answer[i])
 
-                # 为输入框添加文本变化事件（实时保存答案）
+                # 绑定事件
                 input_field.textChanged.connect(lambda text, q_id=question_id, idx=i: self.on_cloze_text_changed(q_id, idx, text))
-                # 为输入框添加失去焦点事件（检查是否所有空都填完）
                 input_field.editingFinished.connect(lambda q_id=question_id, idx=i, field=input_field: self.on_cloze_finished(q_id, idx, field))
 
-                blank_layout.addWidget(input_field, 1)  # 设置拉伸因子
+                blank_layout.addWidget(input_field, 1)
                 self.options_layout.addWidget(blank_widget)
 
         # 更新解析内容
@@ -1406,7 +2093,6 @@ class ExamWindow(QWidget):
             blank_count = question_text.count('______')
 
             if blank_count > 1:
-                # 多空填空题：显示每个空的正确答案
                 import re
                 blank_num_match = re.findall(r'(\d+)______', question_text)
 
@@ -1466,7 +2152,7 @@ class ExamWindow(QWidget):
 
         # 解析部分不需要处理&符号，可以正常显示
         analysis_text = question.get('analysis', '暂无解析')
-        self.analysis_label.setText(analysis_text)
+        self.analysis_label.setText(f"{analysis_text}")
 
         # 保存要聚焦的item索引
         self.current_item_index = item_index
@@ -1499,7 +2185,6 @@ class ExamWindow(QWidget):
             QTimer.singleShot(150, lambda: self.restore_input_field_colors(question, question_id))
         # 聚焦到当前输入框
         QTimer.singleShot(100, self.focus_current_item)
-
     def restore_input_field_colors(self, question, question_id):
         """恢复已答题目的输入框颜色状态"""
         if question_id not in self.user_answers:
@@ -2763,6 +3448,459 @@ class ExamWindow(QWidget):
         self.update_exam_total_questions()
         # 可以添加一些视觉反馈，比如滚动到对应位置
         print(f"跳转到题目 {question_index}, item_index: {item_index}")
+
+    # def display_process_table_image(self):
+    #     """显示进程表图片"""
+    #     try:
+    #         # 读取base64图片文件
+    #         import os
+    #         base64_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    #                                       "data", "pics", "jinchengbiao.txt")
+
+    #         if not os.path.exists(base64_file_path):
+    #             print(f"警告: 图片文件不存在: {base64_file_path}")
+    #             return
+
+    #         with open(base64_file_path, 'r', encoding='utf-8') as f:
+    #             base64_content = f.read().strip()
+
+    #         # 创建图片标签
+    #         image_label = QLabel()
+    #         image_label.setTextFormat(Qt.RichText)
+
+    #         # 设置图片HTML（直接使用base64编码）
+    #         # 注意：base64_content已经是完整的<img>标签，包含base64编码
+    #         image_label.setText(base64_content)
+
+    #         # 设置图片样式
+    #         image_label.setStyleSheet("""
+    #             QLabel {
+    #                 margin: 20px 0;
+    #                 border: 1px solid #dee2e6;
+    #                 border-radius: 5px;
+    #                 padding: 10px;
+    #                 background-color: white;
+    #             }
+    #         """)
+
+    #         # 设置图片对齐方式
+    #         image_label.setAlignment(Qt.AlignCenter)
+
+    #         # 将图片添加到布局中
+    #         self.options_layout.addWidget(image_label)
+
+    #         print("进程表图片已显示")
+
+    #     except Exception as e:
+    #         print(f"显示进程表图片失败: {e}")
+    #         import traceback
+    #         traceback.print_exc()
+
+    # def display_process_table_image(self):
+        """显示进程表图片 (优化版：使用QPixmap加载)"""
+        try:
+            import os
+            import base64
+            from PyQt5.QtGui import QPixmap, QImage
+            from PyQt5.QtCore import Qt
+
+            # 1. 构建路径
+            base64_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                                            "data", "pics", "jinchengbiao.txt")
+
+            if not os.path.exists(base64_file_path):
+                print(f"警告: 图片文件不存在: {base64_file_path}")
+                return
+
+            # 2. 读取 Base64 字符串
+            with open(base64_file_path, 'r', encoding='utf-8') as f:
+                base64_content = f.read().strip()
+
+            # 3. 数据清洗：如果包含 data:image... 前缀，需要去掉才能被 b64decode 识别
+            if "base64," in base64_content:
+                base64_content = base64_content.split("base64,")[1]
+            
+            # 清理可能的HTML标签（如果文件里存的是<img>标签）
+            if "<img" in base64_content:
+                # 简单粗暴提取base64部分，建议文件里只存纯base64字符串
+                import re
+                match = re.search(r'base64,([^"]+)', base64_content)
+                if match:
+                    base64_content = match.group(1)
+
+            # 4. 解码并加载为 QPixmap
+            img_data = base64.b64decode(base64_content)
+            image = QImage.fromData(img_data)
+            pixmap = QPixmap.fromImage(image)
+
+            if pixmap.isNull():
+                print("错误: 图片加载失败，数据可能损坏")
+                return
+
+            # 5. 图片缩放 (可选：限制最大宽度为窗口宽度的80%，保持比例)
+            # 获取滚动区域的大致宽度，这里预估一个值或者获取父控件宽度
+            max_width = 800 
+            if pixmap.width() > max_width:
+                pixmap = pixmap.scaledToWidth(max_width, Qt.SmoothTransformation)
+
+            # 6. 创建 Label 并显示
+            image_label = QLabel()
+            image_label.setPixmap(pixmap)
+            
+            # 设置样式：居中，加边框
+            image_label.setStyleSheet("""
+                QLabel {
+                    border: 1px solid #dee2e6;
+                    border-radius: 5px;
+                    padding: 5px;
+                    background-color: white;
+                    margin-bottom: 15px;
+                }
+            """)
+            image_label.setAlignment(Qt.AlignCenter)
+
+            # 7. 添加到布局 (插入到适当位置，比如题干后面)
+            # 注意：comprehensive 题型中，options_layout 的第0个是题干，我们在后面添加
+            self.options_layout.addWidget(image_label)
+            
+            print("进程表图片已成功显示 (QPixmap模式)")
+
+        except Exception as e:
+            print(f"显示进程表图片失败: {e}")
+            import traceback
+            traceback.print_exc()
+    def needs_image_display(self, question):
+        """检查题目是否需要显示图片
+
+        Args:
+            question: 题目数据
+
+        Returns:
+            bool: 是否需要显示图片
+        """
+        # 方法1：检查题目中是否包含图片标记
+        question_text = question.get('question', '')
+        if "（图片见下方）" in question_text or "(图片见下方)" in question_text:
+            return True
+
+        # 方法2：检查题目是否有image字段
+        if question.get('image'):
+            return True
+
+        # 方法3：检查题目ID是否在图片映射中
+        question_id = question.get('id', '')
+        if question_id in self.get_image_mapping():
+            return True
+
+        return False
+
+    def get_image_mapping(self):
+        """获取题目ID到图片文件的映射
+
+        Returns:
+            dict: 题目ID到图片文件名的映射
+        """
+        try:
+            import os
+            import json
+
+            # 配置文件路径
+            config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                                      "data", "image_mapping.json")
+
+            if os.path.exists(config_path):
+                with open(config_path, 'r', encoding='utf-8') as f:
+                    config = json.load(f)
+                    return config.get('image_mapping', {})
+            else:
+                # 如果配置文件不存在，返回默认映射
+                print(f"警告: 图片映射配置文件不存在: {config_path}")
+                return {
+                    "q_053_062_image_parsed": "jinchengbiao.txt",  # 进程表图片
+                }
+
+        except Exception as e:
+            print(f"加载图片映射配置失败: {e}")
+            # 返回默认映射
+            return {
+                "q_053_062_image_parsed": "jinchengbiao.txt",  # 进程表图片
+            }
+
+    # def display_image_for_question(self, question):
+        """显示题目对应的图片
+
+        Args:
+            question: 题目数据
+        """
+        question_id = question.get('id', '')
+
+        # 获取图片文件名
+        image_mapping = self.get_image_mapping()
+        image_filename = image_mapping.get(question_id)
+
+        if not image_filename:
+            # 如果没有找到映射，尝试使用默认图片或根据题目内容推断
+            print(f"警告: 未找到题目 {question_id} 的图片映射")
+            return
+
+        # 显示图片
+        self.display_image(image_filename)
+
+
+    def display_image_for_question(self, question, anchor_widget=None):
+        """显示题目对应的图片
+        
+        Args:
+            question: 题目数据
+            anchor_widget: 锚点组件（通常是题干Label），图片将显示在该组件下方
+        """
+        question_id = question.get('id', '')
+
+        # 获取图片文件名
+        image_mapping = self.get_image_mapping()
+        image_filename = image_mapping.get(question_id)
+
+        if not image_filename:
+            # 如果没有找到映射，尝试使用默认图片或根据题目内容推断
+            # print(f"警告: 未找到题目 {question_id} 的图片映射")
+            return
+
+        # 显示图片，并传递锚点组件
+        self.display_image(image_filename, anchor_widget=anchor_widget)
+    # def display_image(self, image_filename, max_width=800):
+    #     """显示指定图片文件
+
+    #     Args:
+    #         image_filename: 图片文件名（在data/pics目录下）
+    #         max_width: 图片最大宽度
+    #     """
+    #     try:
+    #         import os
+    #         import base64
+    #         import re
+    #         from PyQt5.QtGui import QPixmap, QImage
+    #         from PyQt5.QtCore import Qt
+
+    #         # 构建图片文件路径
+    #         image_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "pics")
+    #         image_path = os.path.join(image_dir, image_filename)
+
+    #         if not os.path.exists(image_path):
+    #             print(f"警告: 图片文件不存在: {image_path}")
+    #             # 尝试添加.txt后缀
+    #             if not image_filename.endswith('.txt'):
+    #                 txt_path = os.path.join(image_dir, f"{image_filename}.txt")
+    #                 if os.path.exists(txt_path):
+    #                     image_path = txt_path
+    #                 else:
+    #                     # 尝试.png后缀
+    #                     png_path = os.path.join(image_dir, f"{image_filename}.png")
+    #                     if os.path.exists(png_path):
+    #                         image_path = png_path
+    #                     else:
+    #                         print(f"错误: 找不到图片文件: {image_filename}")
+    #                         return
+
+    #         print(f"正在加载图片: {image_path}")
+
+    #         # 根据文件类型选择加载方式
+    #         if image_path.endswith('.txt'):
+    #             # 加载base64格式的图片
+    #             pixmap = self.load_base64_image(image_path, max_width)
+    #         else:
+    #             # 加载普通图片文件
+    #             pixmap = self.load_image_file(image_path, max_width)
+
+    #         if pixmap and not pixmap.isNull():
+    #             # 显示图片
+    #             image_label = QLabel()
+    #             image_label.setPixmap(pixmap)
+    #             image_label.setStyleSheet("""
+    #                 QLabel {
+    #                     border: 1px solid #dee2e6;
+    #                     border-radius: 5px;
+    #                     padding: 5px;
+    #                     background-color: white;
+    #                     margin-top: 10px;
+    #                     margin-bottom: 10px;
+    #                 }
+    #             """)
+    #             image_label.setAlignment(Qt.AlignCenter)
+
+    #             # 添加到布局
+    #             self.options_layout.addWidget(image_label)
+    #             print(f"图片显示成功: {image_filename}")
+    #         else:
+    #             print(f"错误: 图片加载失败: {image_filename}")
+
+    #     except Exception as e:
+    #         print(f"显示图片时发生错误: {e}")
+    #         import traceback
+    #         traceback.print_exc()
+
+    def display_image(self, image_filename, max_width=800, anchor_widget=None):
+        """显示指定图片文件
+        
+        Args:
+            image_filename: 图片文件名
+            max_width: 图片最大宽度
+            anchor_widget: 锚点组件（通常是题干Label），图片将插入到该组件的下方
+        """
+        try:
+            import os
+            import base64
+            import re
+            from PyQt5.QtGui import QPixmap, QImage
+            from PyQt5.QtCore import Qt
+            from PyQt5.QtWidgets import QLabel # 确保导入QLabel
+
+            # 构建图片文件路径
+            image_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "pics")
+            image_path = os.path.join(image_dir, image_filename)
+
+            if not os.path.exists(image_path):
+                # 尝试添加后缀查找逻辑
+                if not image_filename.endswith('.txt'):
+                    txt_path = os.path.join(image_dir, f"{image_filename}.txt")
+                    if os.path.exists(txt_path):
+                        image_path = txt_path
+                    else:
+                        png_path = os.path.join(image_dir, f"{image_filename}.png")
+                        if os.path.exists(png_path):
+                            image_path = png_path
+                        else:
+                            print(f"错误: 找不到图片文件: {image_filename}")
+                            return
+
+            print(f"正在加载图片: {image_path}")
+
+            # 根据文件类型选择加载方式
+            pixmap = None
+            if image_path.endswith('.txt'):
+                pixmap = self.load_base64_image(image_path, max_width)
+            else:
+                pixmap = self.load_image_file(image_path, max_width)
+
+            if pixmap and not pixmap.isNull():
+                # 创建图片 Label
+                image_label = QLabel()
+                image_label.setPixmap(pixmap)
+                image_label.setStyleSheet("""
+                    QLabel {
+                        border: 1px solid #dee2e6;
+                        border-radius: 5px;
+                        padding: 5px;
+                        background-color: white;
+                        margin-top: 5px;
+                        margin-bottom: 15px;
+                    }
+                """)
+                image_label.setAlignment(Qt.AlignCenter)
+
+                # --- 核心修改：决定图片插入的位置 ---
+                inserted = False
+                if anchor_widget:
+                    # 
+                    # 查找锚点组件（题干）在布局中的索引
+                    index = self.options_layout.indexOf(anchor_widget)
+                    if index != -1:
+                        # 插入到锚点的下一个位置 (index + 1)
+                        self.options_layout.insertWidget(index + 1, image_label)
+                        inserted = True
+                        print(f"图片已插入到题干下方 (Index: {index + 1})")
+                
+                # 如果没有锚点或者查找失败，回退到默认行为（添加到末尾）
+                if not inserted:
+                    self.options_layout.addWidget(image_label)
+                    print(f"图片已添加到布局末尾")
+                
+                print(f"图片显示成功: {image_filename}")
+            else:
+                print(f"错误: 图片加载失败: {image_filename}")
+
+        except Exception as e:
+            print(f"显示图片时发生错误: {e}")
+            import traceback
+            traceback.print_exc()
+    def load_base64_image(self, file_path, max_width=800):
+        """加载base64格式的图片文件
+
+        Args:
+            file_path: base64文件路径
+            max_width: 图片最大宽度
+
+        Returns:
+            QPixmap: 加载的图片，如果失败返回None
+        """
+        try:
+            import base64
+            import re
+            from PyQt5.QtGui import QPixmap, QImage
+            from PyQt5.QtCore import Qt
+
+            # 读取文件内容
+            with open(file_path, 'r', encoding='utf-8') as f:
+                raw_content = f.read().strip()
+
+            # 提取有效的 Base64 数据
+            if "base64," in raw_content:
+                raw_content = raw_content.split("base64,")[1]
+
+            # 使用正则找出第一段连续的 Base64 字符
+            match = re.search(r'([A-Za-z0-9+/=]+)', raw_content)
+            if match:
+                base64_content = match.group(1)
+            else:
+                base64_content = re.sub(r'[^A-Za-z0-9+/=]', '', raw_content)
+
+            # 解码并加载图片
+            img_data = base64.b64decode(base64_content)
+            image = QImage.fromData(img_data)
+            pixmap = QPixmap.fromImage(image)
+
+            if pixmap.isNull():
+                print("错误: 图片解码后为空，可能是Base64数据不完整")
+                return None
+
+            # 图片缩放
+            if pixmap.width() > max_width:
+                pixmap = pixmap.scaledToWidth(max_width, Qt.SmoothTransformation)
+
+            return pixmap
+
+        except Exception as e:
+            print(f"加载base64图片失败: {e}")
+            return None
+
+    def load_image_file(self, file_path, max_width=800):
+        """加载普通图片文件
+
+        Args:
+            file_path: 图片文件路径
+            max_width: 图片最大宽度
+
+        Returns:
+            QPixmap: 加载的图片，如果失败返回None
+        """
+        try:
+            from PyQt5.QtGui import QPixmap
+            from PyQt5.QtCore import Qt
+
+            pixmap = QPixmap(file_path)
+
+            if pixmap.isNull():
+                print(f"错误: 无法加载图片文件: {file_path}")
+                return None
+
+            # 图片缩放
+            if pixmap.width() > max_width:
+                pixmap = pixmap.scaledToWidth(max_width, Qt.SmoothTransformation)
+
+            return pixmap
+
+        except Exception as e:
+            print(f"加载图片文件失败: {e}")
+            return None
 
     def resizeEvent(self, event):
         """窗口大小改变事件"""
