@@ -888,7 +888,10 @@ class ExamWindow(QWidget):
             """
         else:
             # 其他题型：转义HTML特殊字符并显示题号在题目左边
+            # 首先转义HTML特殊字符
             question_text = html.escape(question['question'])
+            # 将换行符转换为HTML换行标签
+            question_text = question_text.replace('\n', '<br>')
             question_number = question.get('question_number', index + 1)
             question_html = f"""
             <div style="display: flex; align-items: flex-start; margin-bottom: 10px;">

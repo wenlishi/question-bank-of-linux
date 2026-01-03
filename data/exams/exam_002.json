@@ -768,7 +768,7 @@
     {
       "id": "q_053_062",
       "type": "comprehensive",
-      "question": "假设某服务器IP地址为10.1.1.10，某用户所在客户端IP地址为10.1.1.50。用户在客户端完成了C语言应用程序，相关文件放在/opt/myproject/目录下。用户需要将自己的源程序上传到服务器进行编译、运行和调试。\n首先用户用scp命令把本地文件目录/opt/myproject/上传至服务器的/opt/目录下，应输入：\n[root@localhost]# (53)______________\n然后，用户使用ssh以root身份登录服务器，应输入：\n[root@localhost]# (54)______________\n\n上传成功，进入服务器/opt/myproject/目录后，用户使用gcc编译该目录下的c语言源程序，使用 (55)______________ 编译选项产生调试信息，使用 (56)______________ 项指定目录下的文件加入程序库文件的搜索目录列表中。\n假设源程序main.c如下：\n#include <stdio.h>\nint add(int a, int b)\n{\n  int c = a + b;\n  return c;\n}\nint main(void)\n{\n  int i = 0;\n  int j = 3;\n  int k = add(i,j);\n  printf(\"i=%d, j=%d, k=%d\\n\", i,j,k);\n  return 0;\n}\n加入调试选项进行编译后，启动gdb调试该程序，应输入： (57)______________\n\n在 “int k = add(i,j);” 处设置断点，应输入： (58)______________\n然后在gdb的提示符下输入run运行程序，程序运行到所设断点处，然后输入 (59)______________ 令执行 “int k = add(i,j);” 语句，执行完程序停到printf处。之后输入 (60)______________ 命令继续执行。\n用户进一步将add函数从main.c文件中分离出来，放到单独的add.c文件中，并打算使用make命令进行程序的编译，需要编写 (61)______________ 文件如下。\nmain : main.o add.o\n    gcc -o main main.o add.o\nmain.o : main.c\n    gcc -c main.c\nadd.o : add.c\n    gcc -c add.c\nclean :\n    rm main main.o add.o\n然后执行make命令进行编译，当用户需要清理编译生成的可执行程序和中间文件时，应执行 (62)______________",
+      "question": "假设某服务器IP地址为10.1.1.10，某用户所在客户端IP地址为10.1.1.50。用户在客户端完成了C语言应用程序，相关文件放在/opt/myproject/目录下。用户需要将自己的源程序上传到服务器进行编译、运行和调试。\n首先用户用scp命令把本地文件目录/opt/myproject/上传至服务器的/opt/目录下，应输入：\n[root@localhost]# (53)______________\n然后，用户使用ssh以root身份登录服务器，应输入：\n[root@localhost]# (54)______________\n\n上传成功，进入服务器/opt/myproject/目录后，用户使用gcc编译该目录下的c语言源程序，使用 (55)______________ 编译选项产生调试信息，使用 (56)______________ 项指定目录下的文件加入程序库文件的搜索目录列表中。\n假设源程序main.c如下：\n#include <stdio.h>\nint add(int a, int b)\n{\n\u00A0\u00A0\u00A0\u00A0int c = a + b;\n\u00A0\u00A0\u00A0\u00A0return c;\n}\nint main(void)\n{\n\u00A0\u00A0\u00A0\u00A0int i = 0;\n\u00A0\u00A0\u00A0\u00A0int j = 3;\n\u00A0\u00A0\u00A0\u00A0int k = add(i,j);\n\u00A0\u00A0\u00A0\u00A0printf(\"i=%d, j=%d, k=%d\\n\", i,j,k);\n\u00A0\u00A0\u00A0\u00A0return 0;\n}\n加入调试选项进行编译后，启动gdb调试该程序，应输入： (57)______________\n\n在 “int k = add(i,j);” 处设置断点，应输入： (58)______________\n然后在gdb的提示符下输入run运行程序，程序运行到所设断点处，然后输入 (59)______________ 令执行 “int k = add(i,j);” 语句，执行完程序停到printf处。之后输入 (60)______________ 命令继续执行。\n用户进一步将add函数从main.c文件中分离出来，放到单独的add.c文件中，并打算使用make命令进行程序的编译，需要编写 (61)______________ 文件如下。\nmain : main.o add.o\n\u00A0\u00A0\u00A0\u00A0gcc -o main main.o add.o\nmain.o : main.c\n\u00A0\u00A0\u00A0\u00A0gcc -c main.c\nadd.o : add.c\n\u00A0\u00A0\u00A0\u00A0gcc -c add.c\nclean :\n\u00A0\u00A0\u00A0\u00A0rm main main.o add.o\n然后执行make命令进行编译，当用户需要清理编译生成的可执行程序和中间文件时，应执行 (62)______________",
       "analysis": "【解析】\n[53] scp命令上传本地目录到服务器的格式是：[root@localhost]#scp -r local_dir username@servername:remote_dir，那么把本地文件目录/opt/myproject/上传至服务器的/opt/目录下输入[root@localhost]#scp -r /opt/myproject/ root@10.1.1.10:/opt/，故此空填写scp -r /opt/myproject/ root@10.1.1.10:/opt/；\n[54] 使用ssh命令远程登录的一般格式为：ssh [用户名]@[远程主机IP地址或域名] [选项]，那么用户需要使用 ssh 命令以 root 身份登录到 IP 地址为 10.1.1.10 的服务器，那么此空填写ssh root@10.1.1.10；\n[55] 需要对源代码进行调试，可以使用-g (或g) 编译器选项；\n[56] 将目录名下的文件加入程序库文件的搜索目录列表中，可以使用-L (或L) 编译器选项；\n[57] 启动gdb对源程序进行调试，输入gdb main；\n[58] 使用break命令来设置断点，大多数是将断点设置在某行，设置的方法在break语句的后面加上行号，根据题意可知 “int k = add(i,j);” 在源程序的第11行，那么此处设置断点输入break 11；\n[59] next命令会把该函数当作一条语句执行，不会进入函数的内部，那么使用next命令执行 “int k = add(i,j);” 语句，执行完程序停到printf处；\n[60] 如果想让程序继续运行到下一个断点或者运行完整个程序，可以使用continue命令，继续执行；\n[61] 在执行make命令时，通常将make工具的编译指令放入一个名为 makefile的文件中，该文件定义了整个项目的编译规则、模块之间的依赖关系和文件的编译顺序，故此空填写makefile；\n[62] 执行 make clean 时，会删除可执行程序以及所有中间文件，故此空填写make clean。",
       "items": [
         {
@@ -829,6 +829,74 @@
           "id": "q_062",
           "index": 62,
           "answer": "make clean",
+          "score": 2
+        }
+      ]
+    },
+    {
+      "id": "q_063_072",
+      "type": "comprehensive",
+      "question": "当前工作目录下面有三个脚本ex1, ex2 ,ex3，写出执行脚本ex1后的显示结果：\n[student@localhost~] $ cat ex1\nexport score=100\necho \"=====\"\n./ex2\necho \"=====\"\n./ex3\n[student@localhost~] $ cat ex2\necho \"2:\"$score\nexport score=90\n./ex3\n[student@localhost~] $ cat ex3\necho \"3:\"$score\n(63)______________\n(64)______________\n(65)______________\n(66)______________\n(67)______________\n\n继续执行以下shell命令：\n[student@localhost~] $ touch file1 file2 file3 file4\n[student@localhost~] $ echo a > file1\n[student@localhost~] $ echo -n a > file2\n[student@localhost~] $ for ((i=0; i<4096; i++)); do echo a >> file3; done\n[student@localhost~] $ for ((i=0; i<4096; i++)); do echo -n a >> file4; done\n[student@localhost~] $ wc -c file? | sort -n\n结果是\n(68)______________\n(69)______________\n(70)______________\n(71)______________\n(72)______________",
+      "analysis": "【解析】\nex1启动时：通过 export score=100 设置全局环境变量，首次echo \"=====\" 输出=====，显示分隔符。\n执行ex2：ex2继承父进程（ex1）的 score=100，输出 2:100。\nex2内部修改并导出 score=90，但此修改仅作用于其子进程（后续调用的ex3），ex2调用ex3时，ex3读取当前环境变量 score=90，输出 3:90。\n返回ex1：ex2结束后，父进程ex1的环境变量仍保持 score=100，再次输出分隔符 =====。\n调用ex3时，ex3继承ex1的 score=100，输出 3:100\n继续执行以下shell命令，首先系统会在当前目录下创建四个空文件，分别命名为 file1、file2、file3 和 file4；\necho a > file1：默认追加换行符\\n，内容为a\\n，占 2字节；\necho -n a > file2：-n 参数禁止换行符，仅写入字符 a，占 1字节；\n循环执行 echo a >> file3 4096次：每次追加 a\\n，每行占 2字节，共写入了 4096 * 2 = 8192字节；\n循环执行 echo -n a >> file4 4096次：每次追加字符 a（无换行符），共写入 4096 * 1 = 4096字节；\nwc -c 统计每个文件的字节数，格式为 字节数 文件名，多文件统计时默认追加总字节数（total），总计写入了2+1+8192+4096=12291字节；sort -n 按数值升序排列，因此结果显示为\n1 file2\n2 file1\n4096 file4\n8192 file3\n12291 total",
+      "items": [
+        {
+          "id": "q_063",
+          "index": 63,
+          "answer": "=====",
+          "score": 2
+        },
+        {
+          "id": "q_064",
+          "index": 64,
+          "answer": "2:100",
+          "score": 2
+        },
+        {
+          "id": "q_065",
+          "index": 65,
+          "answer": "3:90",
+          "score": 2
+        },
+        {
+          "id": "q_066",
+          "index": 66,
+          "answer": "=====",
+          "score": 2
+        },
+        {
+          "id": "q_067",
+          "index": 67,
+          "answer": "3:100",
+          "score": 2
+        },
+        {
+          "id": "q_068",
+          "index": 68,
+          "answer": "1 file2",
+          "score": 2
+        },
+        {
+          "id": "q_069",
+          "index": 69,
+          "answer": "2 file1",
+          "score": 2
+        },
+        {
+          "id": "q_070",
+          "index": 70,
+          "answer": "4096 file4",
+          "score": 2
+        },
+        {
+          "id": "q_071",
+          "index": 71,
+          "answer": "8192 file3",
+          "score": 2
+        },
+        {
+          "id": "q_072",
+          "index": 72,
+          "answer": "12291 total",
           "score": 2
         }
       ]
