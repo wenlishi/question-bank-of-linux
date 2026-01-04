@@ -1,5 +1,3 @@
-
-
 """
 试卷列表窗口 - ExamListWindow
 """
@@ -7,7 +5,7 @@
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTableWidget,
                              QTableWidgetItem, QHeaderView, QPushButton,
                              QLabel, QFrame, QProgressBar, QMessageBox, 
-                             QAbstractItemView)  # === 修改处：添加 QAbstractItemView 导入 ===
+                             QAbstractItemView)
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QFont, QColor, QBrush
 import os
@@ -35,7 +33,7 @@ class ExamListWindow(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("试卷列表")
+        self.setWindowTitle("Linux三级题库")
         self.setGeometry(100, 100, 1200, 750)
 
         # 初始化试题管理器
@@ -67,14 +65,38 @@ class ExamListWindow(QWidget):
         main_layout.setContentsMargins(20, 20, 20, 20)
         main_layout.setSpacing(15)
 
-        # 标题
-        title_label = QLabel("试卷列表")
+        # === 标题区域布局 (左对齐) ===
+        header_layout = QHBoxLayout()
+        # [已删除左侧弹簧，保持左对齐]
+
+        # 1. 主标题
+        title_label = QLabel("Linux三级题库")
         title_font = QFont()
-        title_font.setPointSize(18)
+        title_font.setPointSize(24)
         title_font.setBold(True)
+        title_font.setFamily("Microsoft YaHei")
         title_label.setFont(title_font)
-        title_label.setAlignment(Qt.AlignCenter)
-        main_layout.addWidget(title_label)
+        
+        # 使用指定的颜色 #496EA3
+        title_label.setStyleSheet("color: #496EA3;")
+        
+        # 将标题加入布局，底部对齐
+        header_layout.addWidget(title_label, 0, Qt.AlignBottom)
+
+        # 2. 右侧小字体提示
+        subtitle_label = QLabel("点击下方的学习按钮，即可进入相应的分类学习>>")
+        subtitle_font = QFont()
+        subtitle_font.setPointSize(11)
+        subtitle_font.setFamily("Microsoft YaHei")
+        subtitle_label.setFont(subtitle_font)
+        # 设置颜色为灰色，左边距10px
+        subtitle_label.setStyleSheet("color: #7f8c8d; margin-left: 12px; margin-bottom: 5px;") 
+        # 将副标题加入布局，底部对齐
+        header_layout.addWidget(subtitle_label, 0, Qt.AlignBottom)
+
+        header_layout.addStretch() # [保留] 右侧弹簧，将内容挤向左边
+        
+        main_layout.addLayout(header_layout)
 
         # 创建表格
         self.create_table(main_layout)
@@ -91,12 +113,11 @@ class ExamListWindow(QWidget):
             "状态", "试卷名称", "题目总数", "学习进度", "正确率", "操作"
         ])
 
-        # === 修改处：禁用选中模式和焦点框 ===
         # 设置不可选中（彻底去掉点击变蓝的效果）
         self.table_widget.setSelectionMode(QAbstractItemView.NoSelection)
         # 设置无焦点（去掉点击时的虚线框）
         self.table_widget.setFocusPolicy(Qt.NoFocus)
-        # 禁止编辑（虽然通常默认就是不可编辑，加一层保险）
+        # 禁止编辑
         self.table_widget.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
         # === 列宽设置 ===
@@ -151,7 +172,6 @@ class ExamListWindow(QWidget):
         """)
 
         # 设置表格属性
-        # === 修改处：删除了 selection-background-color 等样式，只保留 hover 效果 ===
         self.table_widget.setAlternatingRowColors(True)
         self.table_widget.setStyleSheet("""
             QTableWidget {
@@ -167,7 +187,7 @@ class ExamListWindow(QWidget):
                 padding: 5px 8px;
                 border-bottom: 1px solid #e1e8ed;
             }
-            /* 鼠标悬停时的效果保留，方便用户查看当前在哪一行 */
+            /* 鼠标悬停时的效果保留 */
             QTableWidget::item:hover {
                 background-color: #ecf0f1;
             }
@@ -203,24 +223,27 @@ class ExamListWindow(QWidget):
         button_layout = QHBoxLayout()
         button_layout.addStretch()
 
-        # 刷新按钮
+        # === 修改处：刷新按钮 - 改为和谐的青色(Teal) ===
         refresh_btn = QPushButton("刷新列表")
         refresh_btn.setFixedSize(130, 45)
         refresh_btn.setStyleSheet("""
             QPushButton {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #7f8c8d, stop:1 #606f70);
+                /* 青色渐变，清新且与蓝色主题和谐 */
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #17a2b8, stop:1 #138496);
                 color: white;
-                border: 1px solid #546162;
+                border: 1px solid #117a8b;
                 border-radius: 6px;
                 font-weight: bold;
                 font-size: 16px;
                 font-family: "Microsoft YaHei";
             }
             QPushButton:hover {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #909ea0, stop:1 #707f80);
+                /* 悬停变亮 */
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1be6ff, stop:1 #17a2b8);
             }
             QPushButton:pressed {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #606f70, stop:1 #546162);
+                /* 点击变深 */
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #138496, stop:1 #117a8b);
             }
         """)
         refresh_btn.clicked.connect(self.refresh_list)
@@ -345,49 +368,53 @@ class ExamListWindow(QWidget):
             btn_layout.setContentsMargins(5, 0, 5, 0)
             btn_layout.setSpacing(8)
 
-            # 学习按钮
+            # === 学习按钮 - 颜色 #46689A ===
             study_btn = QPushButton("学习")
             study_btn.setFixedSize(80, 36)
             study_btn.setCursor(Qt.PointingHandCursor)
             study_btn.setStyleSheet("""
                 QPushButton {
-                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #4a90e2, stop:1 #357abd);
+                    /* 使用 #46689A 作为基础色，渐变微调 */
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #5C7DAF, stop:1 #46689A);
                     color: white;
-                    border: 1px solid #2c639e;
+                    border: 1px solid #355688;
                     border-radius: 4px;
                     font-weight: bold;
                     font-size: 15px;
                     font-family: "Microsoft YaHei";
                 }
                 QPushButton:hover {
-                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #5da3f0, stop:1 #418bce);
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #6B8CC0, stop:1 #5C7DAF);
                 }
                 QPushButton:pressed {
-                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #357abd, stop:1 #2a5f96);
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #46689A, stop:1 #355688);
                 }
             """)
             study_btn.clicked.connect(lambda checked, eid=exam["id"]: self.on_study_clicked(eid))
             btn_layout.addWidget(study_btn)
 
-            # 清除进度按钮
-            clear_btn = QPushButton("清除进度")
-            clear_btn.setFixedSize(90, 36)
+            # === 重置按钮 - 中性灰色 (Silver/Gray) ===
+            clear_btn = QPushButton("重置")
+            clear_btn.setFixedSize(80, 36)
             clear_btn.setCursor(Qt.PointingHandCursor)
             clear_btn.setStyleSheet("""
                 QPushButton {
-                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #e74c3c, stop:1 #c0392b);
+                    /* 中性灰渐变，优雅且不突兀 */
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #99a3a4, stop:1 #7f8c8d);
                     color: white;
-                    border: 1px solid #a93226;
+                    border: 1px solid #707b7c;
                     border-radius: 4px;
                     font-weight: bold;
                     font-size: 15px;
                     font-family: "Microsoft YaHei";
                 }
                 QPushButton:hover {
-                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #f06255, stop:1 #d44637);
+                    /* 悬停变浅 */
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #b2babb, stop:1 #95a5a6);
                 }
                 QPushButton:pressed {
-                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #c0392b, stop:1 #a93226);
+                    /* 点击变深 */
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #7f8c8d, stop:1 #707b7c);
                 }
             """)
             clear_btn.clicked.connect(lambda checked, eid=exam["id"]: self.on_clear_progress_clicked(eid))

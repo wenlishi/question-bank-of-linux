@@ -285,7 +285,7 @@ class ExamWindow(QWidget):
         title_frame = QFrame()
         title_frame.setStyleSheet("""
             QFrame {
-                background-color: #007bff;
+                background-color: #456696;
                 border: none;
             }
         """)
@@ -373,17 +373,17 @@ class ExamWindow(QWidget):
 
         self.type_button_selected_style = """
             QPushButton {
-                background-color: #007bff;
+                background-color: #456696;
                 color: white;
-                border-color: #007bff;
+                border-color: #456696;
                 border-radius: 5px;
                 font-weight: bold;
                 font-size: 14px;
                 padding: 0 20px;
             }
             QPushButton:hover {
-                background-color: #0056b3;
-                border-color: #0056b3;
+                background-color: #3a5780;
+                border-color: #3a5780;
             }
         """
 
@@ -552,9 +552,9 @@ class ExamWindow(QWidget):
                 padding-left: 15px;
             }
             QPushButton:checked {
-                background-color: #007bff;
+                background-color: #456696;
                 color: white;
-                border-color: #007bff;
+                border-color: #456696;
             }
             QPushButton:hover:!checked {
                 background-color: #e9ecef;
@@ -659,7 +659,7 @@ class ExamWindow(QWidget):
         self.bottom_next_btn.setFixedSize(100, 35)
         self.bottom_next_btn.setStyleSheet("""
             QPushButton {
-                background-color: #007bff;
+                background-color: #456696;
                 color: white;
                 border: none;
                 border-radius: 5px;
@@ -667,10 +667,10 @@ class ExamWindow(QWidget):
                 font-size: 14px;
             }
             QPushButton:hover {
-                background-color: #0069d9;
+                background-color: #3a5780;
             }
             QPushButton:pressed {
-                background-color: #0062cc;
+                background-color: #344e73;
             }
             QPushButton:disabled {
                 background-color: #e9ecef;
@@ -1095,7 +1095,7 @@ class ExamWindow(QWidget):
     #                             font-size: 18px;
     #                             font-family: "Microsoft YaHei";
     #                             font-weight: bold;
-    #                             color: #007bff;
+    #                             color: #456696;
     #                             min-width: 40px;
     #                         }
     #                     """)
@@ -1114,7 +1114,7 @@ class ExamWindow(QWidget):
     #                             min-height: 35px;
     #                         }
     #                         QLineEdit:focus {
-    #                             border-color: #007bff;
+    #                             border-color: #456696;
     #                         }
     #                     """)
 
@@ -1150,7 +1150,7 @@ class ExamWindow(QWidget):
     #                         min-height: 35px;
     #                     }
     #                     QLineEdit:focus {
-    #                         border-color: #007bff;
+    #                         border-color: #456696;
     #                     }
     #                 """)
 
@@ -1552,7 +1552,7 @@ class ExamWindow(QWidget):
             question_html = f"""
             <div style="display: flex; align-items: flex-start; margin-bottom: 10px;">
                 <span style="
-                    color: #007bff;
+                    color: #456696;
                     font-size: 20px;
                     font-weight: bold;
                     font-family: 'Microsoft YaHei';
@@ -1683,7 +1683,7 @@ class ExamWindow(QWidget):
                         font-size: 18px;
                         font-family: "Microsoft YaHei";
                         font-weight: bold;
-                        color: #007bff;
+                        color: #456696;
                         min-width: 40px;
                     }
                 """)
@@ -1702,7 +1702,7 @@ class ExamWindow(QWidget):
                         min-height: 35px;
                     }
                     QLineEdit:focus {
-                        border-color: #007bff;
+                        border-color: #456696;
                     }
                 """)
 
@@ -1753,7 +1753,7 @@ class ExamWindow(QWidget):
                                 font-size: 18px;
                                 font-family: "Microsoft YaHei";
                                 font-weight: bold;
-                                color: #007bff;
+                                color: #456696;
                                 min-width: 40px;
                             }
                         """)
@@ -1772,7 +1772,7 @@ class ExamWindow(QWidget):
                                 min-height: 35px;
                             }
                             QLineEdit:focus {
-                                border-color: #007bff;
+                                border-color: #456696;
                             }
                         """)
 
@@ -1808,7 +1808,7 @@ class ExamWindow(QWidget):
                             min-height: 35px;
                         }
                         QLineEdit:focus {
-                            border-color: #007bff;
+                            border-color: #456696;
                         }
                     """)
 
@@ -1853,7 +1853,7 @@ class ExamWindow(QWidget):
             # 在每个______前加上对应的题号
             for i in range(len(parts) - 1):  # 最后一个部分后面没有______
                 current_question_number = first_question_number + i
-                parts[i] = parts[i] + f"<span style='color: #007bff; font-weight: bold;'>{current_question_number}.</span>"
+                parts[i] = parts[i] + f"<span style='color: #456696; font-weight: bold;'>{current_question_number}.</span>"
 
             modified_question_text = '______'.join(parts)
 
@@ -1893,7 +1893,7 @@ class ExamWindow(QWidget):
                         font-size: 18px;
                         font-family: "Microsoft YaHei";
                         font-weight: bold;
-                        color: #007bff;
+                        color: #456696;
                         min-width: 40px;
                     }
                 """)
@@ -1912,7 +1912,7 @@ class ExamWindow(QWidget):
                         min-height: 35px;
                     }
                     QLineEdit:focus {
-                        border-color: #007bff;
+                        border-color: #456696;
                     }
                 """)
 
@@ -1973,7 +1973,7 @@ class ExamWindow(QWidget):
                 # 格式化占位符
                 import re
                 escaped_text1 = html.escape(text_part1)
-                formatted_text1 = re.sub(r'\((\d+)\)_{5,}', r'<span style="color: #007bff; font-weight: bold;">\1.</span>______', escaped_text1)
+                formatted_text1 = re.sub(r'\((\d+)\)_{5,}', r'<span style="color: #456696; font-weight: bold;">\1.</span>______', escaped_text1)
                 formatted_text1 = formatted_text1.replace('\n', '<br>')
                 label1.setText(formatted_text1)
                 label1.setStyleSheet("QLabel { font-size: 18px; font-family: 'Microsoft YaHei'; line-height: 1.6; margin-top: -10px; }")
@@ -1989,7 +1989,7 @@ class ExamWindow(QWidget):
                     label2 = QLabel()
                     label2.setTextFormat(Qt.RichText)
                     escaped_text2 = html.escape(text_part2)
-                    formatted_text2 = re.sub(r'\((\d+)\)_{5,}', r'<span style="color: #007bff; font-weight: bold;">\1.</span>______', escaped_text2)
+                    formatted_text2 = re.sub(r'\((\d+)\)_{5,}', r'<span style="color: #456696; font-weight: bold;">\1.</span>______', escaped_text2)
                     formatted_text2 = formatted_text2.replace('\n', '<br>')
                     label2.setText(formatted_text2)
                     # 给下半部分加一点上边距，和图片隔开
@@ -2003,7 +2003,7 @@ class ExamWindow(QWidget):
                 question_label.setTextFormat(Qt.RichText)
                 escaped_question = html.escape(question_text)
                 import re
-                formatted_question = re.sub(r'\((\d+)\)_{5,}', r'<span style="color: #007bff; font-weight: bold;">\1.</span>______', escaped_question)
+                formatted_question = re.sub(r'\((\d+)\)_{5,}', r'<span style="color: #456696; font-weight: bold;">\1.</span>______', escaped_question)
                 formatted_question = formatted_question.replace('\n', '<br>')
                 question_label.setText(formatted_question)
                 question_label.setStyleSheet("""
@@ -2036,7 +2036,7 @@ class ExamWindow(QWidget):
 
                 # 空位标签
                 blank_label = QLabel(f"{item_index}.")
-                blank_label.setStyleSheet("QLabel { font-size: 18px; font-family: 'Microsoft YaHei'; font-weight: bold; color: #007bff; min-width: 40px; }")
+                blank_label.setStyleSheet("QLabel { font-size: 18px; font-family: 'Microsoft YaHei'; font-weight: bold; color: #456696; min-width: 40px; }")
                 blank_layout.addWidget(blank_label)
 
                 # 输入框
@@ -2044,7 +2044,7 @@ class ExamWindow(QWidget):
                 input_field.setPlaceholderText(f"请输入答案")
                 input_field.setStyleSheet("""
                     QLineEdit { font-size: 18px; font-family: "Microsoft YaHei"; padding: 12px; border: 1px solid #dee2e6; border-radius: 5px; min-height: 35px; }
-                    QLineEdit:focus { border-color: #007bff; }
+                    QLineEdit:focus { border-color: #456696; }
                 """)
 
                 # 恢复答案逻辑
