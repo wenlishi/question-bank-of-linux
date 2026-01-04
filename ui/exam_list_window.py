@@ -109,7 +109,7 @@ class ExamListWindow(QWidget):
         self.table_widget.setColumnWidth(2, 100)  # 题目总数列
         self.table_widget.setColumnWidth(3, 150)  # 学习进度列
         self.table_widget.setColumnWidth(4, 100)  # 正确率列
-        self.table_widget.setColumnWidth(5, 100)  # 操作列
+        self.table_widget.setColumnWidth(5, 180)  # 操作列（增加宽度以容纳两个按钮）
 
         # 设置表格属性
         self.table_widget.setAlternatingRowColors(True)
@@ -263,7 +263,13 @@ class ExamListWindow(QWidget):
             accuracy_item.setForeground(QBrush(QColor(accuracy_color)))
             self.table_widget.setItem(row, 4, accuracy_item)
 
-            # 操作列 - 学习按钮（全部可学习）
+            # 操作列 - 学习按钮和清除进度按钮
+            btn_widget = QWidget()
+            btn_layout = QHBoxLayout(btn_widget)
+            btn_layout.setContentsMargins(0, 0, 0, 0)
+            btn_layout.setSpacing(5)
+
+            # 学习按钮
             study_btn = QPushButton("学习")
             study_btn.setFixedSize(70, 30)
             study_btn.setStyleSheet("""
@@ -281,17 +287,33 @@ class ExamListWindow(QWidget):
                     background-color: #0062cc;
                 }
             """)
-
             # 使用lambda传递试卷ID
             study_btn.clicked.connect(lambda checked, eid=exam["id"]: self.on_study_clicked(eid))
-
-            # 将按钮添加到表格单元格
-            btn_widget = QWidget()
-            btn_layout = QHBoxLayout(btn_widget)
-            btn_layout.setContentsMargins(0, 0, 0, 0)
             btn_layout.addWidget(study_btn)
-            btn_layout.setAlignment(Qt.AlignCenter)
 
+            # 清除进度按钮
+            clear_btn = QPushButton("清除进度")
+            clear_btn.setFixedSize(80, 30)
+            clear_btn.setStyleSheet("""
+                QPushButton {
+                    background-color: #dc3545;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    font-weight: bold;
+                }
+                QPushButton:hover {
+                    background-color: #c82333;
+                }
+                QPushButton:pressed {
+                    background-color: #bd2130;
+                }
+            """)
+            # 使用lambda传递试卷ID
+            clear_btn.clicked.connect(lambda checked, eid=exam["id"]: self.on_clear_progress_clicked(eid))
+            btn_layout.addWidget(clear_btn)
+
+            btn_layout.setAlignment(Qt.AlignCenter)
             self.table_widget.setCellWidget(row, 5, btn_widget)
 
     def get_exam_progress_data(self, exam_id: str, total_questions: int) -> Dict[str, Any]:
@@ -329,6 +351,31 @@ class ExamListWindow(QWidget):
         """学习按钮点击事件"""
         print(f"开始学习试卷: {exam_id}")
         self.study_exam_requested.emit(exam_id)
+
+    def on_clear_progress_clicked(self, exam_id):
+        """清除进度按钮点击事件"""
+        print(f"清除试卷进度: {exam_id}")
+
+        # 确认对话框
+        reply = QMessageBox.question(
+            self,
+            "确认清除进度",
+            f"确定要清除试卷 '{exam_id}' 的学习进度吗？\n此操作将删除所有答题记录，无法恢复。",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+
+        if reply == QMessageBox.Yes:
+            if self.progress_manager:
+                # 清除试卷进度
+                if self.progress_manager.clear_exam_progress(exam_id):
+                    QMessageBox.information(self, "清除成功", f"试卷 '{exam_id}' 的学习进度已清除")
+                    # 刷新列表以显示更新后的进度
+                    self.refresh_list()
+                else:
+                    QMessageBox.warning(self, "清除失败", "清除进度失败，请重试")
+            else:
+                QMessageBox.warning(self, "错误", "进度管理器不可用")
 
     def refresh_list(self):
         """刷新列表"""
