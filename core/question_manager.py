@@ -57,12 +57,24 @@ class QuestionManager:
 
                     # 提取试卷基本信息
                     exam_id = filename.replace('.json', '').replace('.enc', '')
+
+                    # 计算总题数（对于cloze_group和comprehensive类型，每个item算作一道题）
+                    total_questions = 0
+                    questions = exam_data.get('questions', [])
+                    for question in questions:
+                        question_type = question.get('type', 'single_choice')
+                        if question_type == "cloze_group" or question_type == "comprehensive":
+                            items = question.get('items', [])
+                            total_questions += len(items)
+                        else:
+                            total_questions += 1
+
                     exam_info = {
                         'id': exam_data.get('exam_id', exam_id),
                         'name': exam_data.get('exam_name', '未命名试卷'),
                         'description': exam_data.get('description', ''),
                         'time_limit': exam_data.get('time_limit', 120),
-                        'total_questions': len(exam_data.get('questions', [])),
+                        'total_questions': total_questions,
                         'total_score': exam_data.get('total_score', 0),
                         'file_path': exam_path
                     }

@@ -518,21 +518,57 @@ class ExamResultWindow(QWidget):
 
     def update_statistics(self, question_results, user_answers, exam_data):
         """更新统计信息"""
-        total_questions = len(exam_data.get('questions', []))
+        # 计算总题数（对于综合题，每个小空算一题）
+        total_questions = 0
+        questions = exam_data.get('questions', [])
+
+        for question in questions:
+            question_type = question.get('type', 'single_choice')
+            if question_type == 'comprehensive':
+                # 综合题：每个小空算一题
+                items = question.get('items', [])
+                total_questions += len(items)
+            else:
+                # 其他题型：每题算一题
+                total_questions += 1
 
         # 计算各种统计
         correct_count = 0
         wrong_count = 0
         unanswered_count = 0
 
-        for question_id, result in question_results.items():
-            if question_id in user_answers and user_answers[question_id]:
-                if result.get("correct", False):
-                    correct_count += 1
-                else:
-                    wrong_count += 1
+        # 遍历所有题目
+        for question in questions:
+            question_id = question.get('id')
+            question_type = question.get('type', 'single_choice')
+            result = question_results.get(question_id, {"correct": False, "score": 0})
+            user_answer = user_answers.get(question_id, [])
+
+            if question_type == 'comprehensive':
+                # 综合题：处理每个小空
+                items = question.get('items', [])
+                for i in range(len(items)):
+                    if i < len(user_answer) and user_answer[i]:
+                        # 用户回答了这个小空
+                        # 这里需要判断小空是否正确
+                        # 由于question_results只包含整个题目的结果，我们需要从其他地方获取小空的结果
+                        # 暂时使用一个简化的逻辑：如果整个题目正确，则所有小空都正确
+                        if result.get("correct", False):
+                            correct_count += 1
+                        else:
+                            wrong_count += 1
+                    else:
+                        # 用户没有回答这个小空
+                        unanswered_count += 1
             else:
-                unanswered_count += 1
+                # 其他题型
+                if user_answer:
+                    if result.get("correct", False):
+                        correct_count += 1
+                    else:
+                        wrong_count += 1
+                else:
+                    unanswered_count += 1
 
         # 计算正确率
         answered_count = correct_count + wrong_count
@@ -602,7 +638,7 @@ if __name__ == "__main__":
         "q5": {"correct": False, "score": 5}
     }
 
-    window = ExamResultWindow("Linux操作系统测试")
+    window = ExamResultWindow("Linux应用与开发技术")
     window.set_result_data(exam_data, user_answers, question_results)
     window.show()
 

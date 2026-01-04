@@ -3294,11 +3294,11 @@ class ExamWindow(QWidget):
         total_score = 0
         obtained_score = 0
         correct_count = 0
-        # 初始化总题数：对于cloze_group类型，每个item算作一道题
+        # 初始化总题数：对于cloze_group和comprehensive类型，每个item算作一道题
         total_count = 0
         for question in self.questions:
             question_type = question.get('type', 'single_choice')
-            if question_type == "cloze_group":
+            if question_type == "cloze_group" or question_type == "comprehensive":
                 items = question.get('items', [])
                 total_count += len(items)
             else:
@@ -3320,8 +3320,8 @@ class ExamWindow(QWidget):
                 # 记录用户进度
                 if self.progress_manager:
                     question_type = question.get('type', 'single_choice')
-                    if question_type == "cloze_group":
-                        # 对于cloze_group类型，为每个item记录独立的答题结果
+                    if question_type == "cloze_group" or question_type == "comprehensive":
+                        # 对于cloze_group和comprehensive类型，为每个item记录独立的答题结果
                         items = question.get('items', [])
                         for i, item in enumerate(items):
                             item_id = f"{question_id}_item{i+1}"
@@ -3347,8 +3347,8 @@ class ExamWindow(QWidget):
 
                 # 获取题目分值
                 question_type = question.get('type', 'single_choice')
-                if question_type == "cloze_group":
-                    # 对于cloze_group类型，从items中获取每个item的分值
+                if question_type == "cloze_group" or question_type == "comprehensive":
+                    # 对于cloze_group和comprehensive类型，从items中获取每个item的分值
                     items = question.get('items', [])
                     item_scores = []
                     for item in items:
@@ -3357,12 +3357,12 @@ class ExamWindow(QWidget):
 
                     # 使用item_scores的总和作为题目分值
                     question_score = sum(item_scores) if item_scores else 0
-                    # 对于cloze_group类型，使用实际得分而不是整体判断
+                    # 对于cloze_group和comprehensive类型，使用实际得分而不是整体判断
                     earned_score = sum(item_earned_scores) if item_earned_scores else 0
                     total_score += question_score
                     obtained_score += earned_score
 
-                    # 对于cloze_group类型，基于item_correctness计算正确的item数量
+                    # 基于item_correctness计算正确的item数量
                     if item_correctness:
                         correct_items = sum(1 for is_correct in item_correctness if is_correct)
                         correct_count += correct_items
@@ -3375,7 +3375,7 @@ class ExamWindow(QWidget):
             else:
                 # 用户没有做这道题，不计入统计
                 question_type = question.get('type', 'single_choice')
-                if question_type == "cloze_group":
+                if question_type == "cloze_group" or question_type == "comprehensive":
                     items = question.get('items', [])
                     total_count -= len(items)  # 减少对应的item数量
                 else:
