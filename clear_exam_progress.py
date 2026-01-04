@@ -22,7 +22,7 @@ def clear_exam_001_progress():
 
     # 检查当前进度
     print("\n当前进度:")
-    progress_data = progress_manager.get_exam_progress("exam_001")
+    progress_data = progress_manager.get_exam_progress("exam_002")
     print(f"  试卷ID: {progress_data['exam_id']}")
     print(f"  总题数: {progress_data['total_questions']}")
     print(f"  已做题数: {progress_data['attempted_questions']}")
@@ -34,14 +34,14 @@ def clear_exam_001_progress():
 
     # 清除进度
     print("\n正在清除进度...")
-    success = progress_manager.clear_exam_progress("exam_001")
+    success = progress_manager.clear_exam_progress("exam_002")
 
     if success:
         print("[成功] 进度清除成功！")
 
         # 验证清除结果
         print("\n清除后的进度:")
-        progress_data = progress_manager.get_exam_progress("exam_001")
+        progress_data = progress_manager.get_exam_progress("exam_002")
         print(f"  试卷ID: {progress_data['exam_id']}")
         print(f"  总题数: {progress_data['total_questions']}")
         print(f"  已做题数: {progress_data['attempted_questions']}")

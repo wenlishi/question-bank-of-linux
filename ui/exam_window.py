@@ -246,11 +246,11 @@ class ExamWindow(QWidget):
     def update_exam_total_questions(self):
         """更新试卷总题数到进度管理器"""
         if self.progress_manager and self.questions:
-            # 计算实际题目总数（对于cloze_group类型，每个item算作一道题）
+            # 计算实际题目总数（对于cloze_group和comprehensive类型，每个item算作一道题）
             total_questions = 0
             for question in self.questions:
                 question_type = question.get('type', 'single_choice')
-                if question_type == "cloze_group":
+                if question_type == "cloze_group" or question_type == "comprehensive":
                     items = question.get('items', [])
                     total_questions += len(items)
                 else:
@@ -808,7 +808,7 @@ class ExamWindow(QWidget):
             q_type = question.get('type', 'single_choice')
 
             # 添加到题目列表
-            if q_type == "cloze_group":
+            if q_type == "cloze_group" or q_type == "comprehensive":
                 items = question.get('items', [])
                 question['question_number'] = None
                 self.questions.append(question)
@@ -3291,18 +3291,23 @@ class ExamWindow(QWidget):
             return
 
         # 计算成绩
-        total_score = 0
-        obtained_score = 0
+        total_score = 0  # 整个试卷的总分
+        obtained_score = 0  # 用户实际得分
         correct_count = 0
-        # 初始化总题数：对于cloze_group和comprehensive类型，每个item算作一道题
+        # 初始化总题数：统计用户实际做的题目数量
         total_count = 0
+
+        # 先计算整个试卷的总分
         for question in self.questions:
             question_type = question.get('type', 'single_choice')
             if question_type == "cloze_group" or question_type == "comprehensive":
                 items = question.get('items', [])
-                total_count += len(items)
+                for item in items:
+                    item_score = item.get('score', 1)
+                    total_score += item_score
             else:
-                total_count += 1
+                question_score = question.get('score', 5)
+                total_score += question_score
 
         # 生成会话ID（在循环之前）
         import time
@@ -3355,31 +3360,30 @@ class ExamWindow(QWidget):
                         item_score = item.get('score', 1)
                         item_scores.append(item_score)
 
-                    # 使用item_scores的总和作为题目分值
-                    question_score = sum(item_scores) if item_scores else 0
                     # 对于cloze_group和comprehensive类型，使用实际得分而不是整体判断
                     earned_score = sum(item_earned_scores) if item_earned_scores else 0
-                    total_score += question_score
                     obtained_score += earned_score
+
+                    # 统计用户实际做的小空数量
+                    actual_attempted_items = 0
+                    for i in range(len(items)):
+                        if i < len(user_answer) and user_answer[i]:
+                            actual_attempted_items += 1
+                    total_count += actual_attempted_items
 
                     # 基于item_correctness计算正确的item数量
                     if item_correctness:
                         correct_items = sum(1 for is_correct in item_correctness if is_correct)
                         correct_count += correct_items
                 else:
-                    question_score = question.get('score', 5)
-                    total_score += question_score
+                    total_count += 1  # 用户做了这道题
                     if is_correct:
                         correct_count += 1
+                        question_score = question.get('score', 5)
                         obtained_score += question_score
             else:
                 # 用户没有做这道题，不计入统计
-                question_type = question.get('type', 'single_choice')
-                if question_type == "cloze_group" or question_type == "comprehensive":
-                    items = question.get('items', [])
-                    total_count -= len(items)  # 减少对应的item数量
-                else:
-                    total_count -= 1  # 减少总题数统计
+                pass
 
         # 计算正确率
         accuracy = (correct_count / total_count * 100) if total_count > 0 else 0
@@ -3396,7 +3400,7 @@ class ExamWindow(QWidget):
         # 显示成绩（使用原来的简单弹窗）
         result_text = f"""
         <h3>试卷完成!</h3>
-        <p><b>总题数:</b> {total_count}</p>
+        <p><b>作答题数:</b> {total_count}</p>
         <p><b>正确数:</b> {correct_count}</p>
         <p><b>得分:</b> {obtained_score}/{total_score}</p>
         <p><b>正确率:</b> {accuracy:.1f}%</p>
