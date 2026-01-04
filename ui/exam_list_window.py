@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
+
 """
 试卷列表窗口 - ExamListWindow
 """
 
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTableWidget,
                              QTableWidgetItem, QHeaderView, QPushButton,
-                             QLabel, QFrame, QProgressBar, QMessageBox)
+                             QLabel, QFrame, QProgressBar, QMessageBox, 
+                             QAbstractItemView)  # === 修改处：添加 QAbstractItemView 导入 ===
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QFont, QColor, QBrush
 import os
@@ -35,7 +36,7 @@ class ExamListWindow(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("试卷列表")
-        self.setGeometry(100, 100, 1000, 600)
+        self.setGeometry(100, 100, 1200, 750)
 
         # 初始化试题管理器
         if QUESTION_MANAGER_AVAILABLE:
@@ -69,7 +70,7 @@ class ExamListWindow(QWidget):
         # 标题
         title_label = QLabel("试卷列表")
         title_font = QFont()
-        title_font.setPointSize(16)
+        title_font.setPointSize(18)
         title_font.setBold(True)
         title_label.setFont(title_font)
         title_label.setAlignment(Qt.AlignCenter)
@@ -82,7 +83,7 @@ class ExamListWindow(QWidget):
         self.create_bottom_buttons(main_layout)
 
     def create_table(self, parent_layout):
-        """创建试卷表格"""
+        """创建试卷表格 - 样式优化版（大字体，无选中效果）"""
         # 创建表格
         self.table_widget = QTableWidget()
         self.table_widget.setColumnCount(6)  # 状态、名称、题目总数、学习进度、正确率、操作
@@ -90,38 +91,105 @@ class ExamListWindow(QWidget):
             "状态", "试卷名称", "题目总数", "学习进度", "正确率", "操作"
         ])
 
-        # 设置表头样式
+        # === 修改处：禁用选中模式和焦点框 ===
+        # 设置不可选中（彻底去掉点击变蓝的效果）
+        self.table_widget.setSelectionMode(QAbstractItemView.NoSelection)
+        # 设置无焦点（去掉点击时的虚线框）
+        self.table_widget.setFocusPolicy(Qt.NoFocus)
+        # 禁止编辑（虽然通常默认就是不可编辑，加一层保险）
+        self.table_widget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+        # === 列宽设置 ===
         header = self.table_widget.horizontalHeader()
+        
+        # 0. 状态列：固定宽度
+        header.setSectionResizeMode(0, QHeaderView.Fixed)
+        self.table_widget.setColumnWidth(0, 80)
+        
+        # 1. 试卷名称列：自动伸缩 (Stretch)，占满剩余所有空间
+        header.setSectionResizeMode(1, QHeaderView.Stretch)
+        
+        # 2. 题目总数：固定宽度
+        header.setSectionResizeMode(2, QHeaderView.Fixed)
+        self.table_widget.setColumnWidth(2, 130)
+        
+        # 3. 学习进度：固定宽度
+        header.setSectionResizeMode(3, QHeaderView.Fixed)
+        self.table_widget.setColumnWidth(3, 220)
+        
+        # 4. 正确率：固定宽度
+        header.setSectionResizeMode(4, QHeaderView.Fixed)
+        self.table_widget.setColumnWidth(4, 130)
+        
+        # 5. 操作列：固定宽度
+        header.setSectionResizeMode(5, QHeaderView.Fixed)
+        self.table_widget.setColumnWidth(5, 220)
+
+        # === 行高设置 ===
+        self.table_widget.verticalHeader().setDefaultSectionSize(60)
+
+        # 设置表头样式
         header.setStyleSheet("""
             QHeaderView::section {
-                background-color: #f8f9fa;
-                color: #007bff;
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                    stop:0 #4a6fa5, stop:1 #2c3e50);
+                color: white;
                 font-weight: bold;
-                font-size: 16px;
-                padding: 8px;
-                border: 1px solid #dee2e6;
+                font-size: 18px;
+                font-family: "Microsoft YaHei";
+                padding: 12px 8px;
+                border: none;
+                border-right: 1px solid #34495e;
+                border-bottom: 2px solid #2c3e50;
+            }
+            QHeaderView::section:first {
+                border-left: none;
+            }
+            QHeaderView::section:last {
+                border-right: none;
             }
         """)
 
-        # 设置列宽
-        self.table_widget.setColumnWidth(0, 60)   # 状态列
-        self.table_widget.setColumnWidth(1, 300)  # 试卷名称列
-        self.table_widget.setColumnWidth(2, 100)  # 题目总数列
-        self.table_widget.setColumnWidth(3, 150)  # 学习进度列
-        self.table_widget.setColumnWidth(4, 100)  # 正确率列
-        self.table_widget.setColumnWidth(5, 180)  # 操作列（增加宽度以容纳两个按钮）
-
         # 设置表格属性
+        # === 修改处：删除了 selection-background-color 等样式，只保留 hover 效果 ===
         self.table_widget.setAlternatingRowColors(True)
         self.table_widget.setStyleSheet("""
             QTableWidget {
-                background-color: white;
-                alternate-background-color: #f8f9fa;
-                gridline-color: #dee2e6;
-                border: 1px solid #dee2e6;
+                background-color: #f5f7fa;
+                alternate-background-color: #ffffff;
+                gridline-color: #e1e8ed;
+                border: 2px solid #dce4ec;
+                border-radius: 8px;
+                font-family: "Microsoft YaHei";
+                font-size: 18px;
             }
             QTableWidget::item {
-                padding: 8px;
+                padding: 5px 8px;
+                border-bottom: 1px solid #e1e8ed;
+            }
+            /* 鼠标悬停时的效果保留，方便用户查看当前在哪一行 */
+            QTableWidget::item:hover {
+                background-color: #ecf0f1;
+            }
+            QTableWidget QScrollBar:vertical {
+                border: none;
+                background: #ecf0f1;
+                width: 14px;
+                margin: 0px;
+            }
+            QTableWidget QScrollBar::handle:vertical {
+                background: #bdc3c7;
+                border-radius: 7px;
+                min-height: 20px;
+            }
+            QTableWidget QScrollBar::handle:vertical:hover {
+                background: #95a5a6;
+            }
+            QTableWidget QScrollBar::add-line:vertical,
+            QTableWidget QScrollBar::sub-line:vertical {
+                border: none;
+                background: none;
+                height: 0px;
             }
         """)
 
@@ -137,20 +205,22 @@ class ExamListWindow(QWidget):
 
         # 刷新按钮
         refresh_btn = QPushButton("刷新列表")
-        refresh_btn.setFixedSize(100, 35)
+        refresh_btn.setFixedSize(130, 45)
         refresh_btn.setStyleSheet("""
             QPushButton {
-                background-color: #6c757d;
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #7f8c8d, stop:1 #606f70);
                 color: white;
-                border: none;
-                border-radius: 5px;
+                border: 1px solid #546162;
+                border-radius: 6px;
                 font-weight: bold;
+                font-size: 16px;
+                font-family: "Microsoft YaHei";
             }
             QPushButton:hover {
-                background-color: #5a6268;
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #909ea0, stop:1 #707f80);
             }
             QPushButton:pressed {
-                background-color: #545b62;
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #606f70, stop:1 #546162);
             }
         """)
         refresh_btn.clicked.connect(self.refresh_list)
@@ -181,7 +251,6 @@ class ExamListWindow(QWidget):
             progress_percentage = progress_data["progress_percentage"]
             accuracy_percentage = progress_data["accuracy_percentage"]
             attempted_questions = progress_data["attempted_questions"]
-            correct_questions = progress_data["correct_questions"]
 
             # 状态列 - 根据进度显示不同图标
             if progress_percentage >= 100:
@@ -213,32 +282,39 @@ class ExamListWindow(QWidget):
             # 学习进度列 - 进度条（真实进度）
             progress_widget = QWidget()
             progress_layout = QHBoxLayout(progress_widget)
-            progress_layout.setContentsMargins(0, 0, 0, 0)
+            progress_layout.setContentsMargins(15, 0, 15, 0)
 
             progress_bar = QProgressBar()
+            progress_bar.setFixedHeight(24)
             progress_bar.setValue(int(progress_percentage))
             progress_bar.setTextVisible(True)
             progress_bar.setFormat(f"{progress_percentage:.1f}%")
 
             # 根据进度设置不同颜色
             if progress_percentage >= 100:
-                progress_color = "#28a745"  # 绿色
+                progress_color = "#28a745"
             elif progress_percentage >= 50:
-                progress_color = "#17a2b8"  # 青色
+                progress_color = "#17a2b8"
             elif progress_percentage > 0:
-                progress_color = "#ffc107"  # 黄色
+                progress_color = "#ffc107"
             else:
-                progress_color = "#007bff"  # 蓝色
+                progress_color = "#007bff"
 
+            # 修复进度条圆角问题
             progress_bar.setStyleSheet(f"""
                 QProgressBar {{
-                    border: 1px solid #dee2e6;
-                    border-radius: 3px;
+                    border: 1px solid #ced4da;
+                    border-radius: 12px;
                     text-align: center;
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #495057;
+                    background-color: #e9ecef;
                 }}
                 QProgressBar::chunk {{
                     background-color: {progress_color};
-                    border-radius: 3px;
+                    border-radius: 10px;
+                    margin: 1px;
                 }}
             """)
             progress_layout.addWidget(progress_bar)
@@ -252,13 +328,13 @@ class ExamListWindow(QWidget):
 
             # 根据正确率设置颜色
             if accuracy_percentage >= 80:
-                accuracy_color = "#28a745"  # 绿色
+                accuracy_color = "#28a745"
             elif accuracy_percentage >= 60:
-                accuracy_color = "#ffc107"  # 黄色
+                accuracy_color = "#ffc107"
             elif accuracy_percentage > 0:
-                accuracy_color = "#fd7e14"  # 橙色
+                accuracy_color = "#fd7e14"
             else:
-                accuracy_color = "#6c757d"  # 灰色
+                accuracy_color = "#6c757d"
 
             accuracy_item.setForeground(QBrush(QColor(accuracy_color)))
             self.table_widget.setItem(row, 4, accuracy_item)
@@ -266,50 +342,54 @@ class ExamListWindow(QWidget):
             # 操作列 - 学习按钮和清除进度按钮
             btn_widget = QWidget()
             btn_layout = QHBoxLayout(btn_widget)
-            btn_layout.setContentsMargins(0, 0, 0, 0)
-            btn_layout.setSpacing(5)
+            btn_layout.setContentsMargins(5, 0, 5, 0)
+            btn_layout.setSpacing(8)
 
             # 学习按钮
             study_btn = QPushButton("学习")
-            study_btn.setFixedSize(70, 30)
+            study_btn.setFixedSize(80, 36)
+            study_btn.setCursor(Qt.PointingHandCursor)
             study_btn.setStyleSheet("""
                 QPushButton {
-                    background-color: #007bff;
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #4a90e2, stop:1 #357abd);
                     color: white;
-                    border: none;
-                    border-radius: 5px;
+                    border: 1px solid #2c639e;
+                    border-radius: 4px;
                     font-weight: bold;
+                    font-size: 15px;
+                    font-family: "Microsoft YaHei";
                 }
                 QPushButton:hover {
-                    background-color: #0069d9;
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #5da3f0, stop:1 #418bce);
                 }
                 QPushButton:pressed {
-                    background-color: #0062cc;
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #357abd, stop:1 #2a5f96);
                 }
             """)
-            # 使用lambda传递试卷ID
             study_btn.clicked.connect(lambda checked, eid=exam["id"]: self.on_study_clicked(eid))
             btn_layout.addWidget(study_btn)
 
             # 清除进度按钮
             clear_btn = QPushButton("清除进度")
-            clear_btn.setFixedSize(80, 30)
+            clear_btn.setFixedSize(90, 36)
+            clear_btn.setCursor(Qt.PointingHandCursor)
             clear_btn.setStyleSheet("""
                 QPushButton {
-                    background-color: #dc3545;
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #e74c3c, stop:1 #c0392b);
                     color: white;
-                    border: none;
-                    border-radius: 5px;
+                    border: 1px solid #a93226;
+                    border-radius: 4px;
                     font-weight: bold;
+                    font-size: 15px;
+                    font-family: "Microsoft YaHei";
                 }
                 QPushButton:hover {
-                    background-color: #c82333;
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #f06255, stop:1 #d44637);
                 }
                 QPushButton:pressed {
-                    background-color: #bd2130;
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #c0392b, stop:1 #a93226);
                 }
             """)
-            # 使用lambda传递试卷ID
             clear_btn.clicked.connect(lambda checked, eid=exam["id"]: self.on_clear_progress_clicked(eid))
             btn_layout.addWidget(clear_btn)
 
@@ -317,25 +397,13 @@ class ExamListWindow(QWidget):
             self.table_widget.setCellWidget(row, 5, btn_widget)
 
     def get_exam_progress_data(self, exam_id: str, total_questions: int) -> Dict[str, Any]:
-        """
-        获取试卷进度数据
-
-        Args:
-            exam_id: 试卷ID
-            total_questions: 总题数
-
-        Returns:
-            进度数据字典
-        """
         if self.progress_manager:
             progress_data = self.progress_manager.get_exam_progress(exam_id)
-            # 确保总题数是最新的
             if progress_data["total_questions"] != total_questions:
                 self.progress_manager.update_exam_total_questions(exam_id, total_questions)
                 progress_data = self.progress_manager.get_exam_progress(exam_id)
             return progress_data
         else:
-            # 如果没有进度管理器，返回默认数据
             return {
                 "exam_id": exam_id,
                 "total_questions": total_questions,
@@ -348,15 +416,11 @@ class ExamListWindow(QWidget):
             }
 
     def on_study_clicked(self, exam_id):
-        """学习按钮点击事件"""
         print(f"开始学习试卷: {exam_id}")
         self.study_exam_requested.emit(exam_id)
 
     def on_clear_progress_clicked(self, exam_id):
-        """清除进度按钮点击事件"""
         print(f"清除试卷进度: {exam_id}")
-
-        # 确认对话框
         reply = QMessageBox.question(
             self,
             "确认清除进度",
@@ -367,10 +431,8 @@ class ExamListWindow(QWidget):
 
         if reply == QMessageBox.Yes:
             if self.progress_manager:
-                # 清除试卷进度
                 if self.progress_manager.clear_exam_progress(exam_id):
                     QMessageBox.information(self, "清除成功", f"试卷 '{exam_id}' 的学习进度已清除")
-                    # 刷新列表以显示更新后的进度
                     self.refresh_list()
                 else:
                     QMessageBox.warning(self, "清除失败", "清除进度失败，请重试")
@@ -378,30 +440,23 @@ class ExamListWindow(QWidget):
                 QMessageBox.warning(self, "错误", "进度管理器不可用")
 
     def refresh_list(self):
-        """刷新列表"""
         print("刷新试卷列表")
-
-        # 重新加载进度数据，确保获取最新状态
         if self.progress_manager:
             if self.progress_manager.reload_data():
                 print("进度数据已重新加载")
             else:
                 print("警告: 重新加载进度数据失败")
-
-        # 重新加载真实数据
         self.load_real_data()
-
-        # 显示刷新完成提示
         print("试卷列表已刷新，进度数据已更新")
-
-        # 可选：显示提示消息
         QMessageBox.information(self, "刷新完成", "试卷列表已刷新，学习进度和正确率已更新到最新状态")
 
     def resizeEvent(self, event):
-        """窗口大小改变事件"""
         super().resizeEvent(event)
-        # 调整表格列宽
-        if hasattr(self, 'table_widget'):
-            width = self.width() - 40  # 减去边距
-            self.table_widget.setColumnWidth(1, int(width * 0.4))  # 试卷名称列占40%
-            self.table_widget.setColumnWidth(3, int(width * 0.2))  # 学习进度列占20%
+        pass
+
+if __name__ == "__main__":
+    from PyQt5.QtWidgets import QApplication
+    app = QApplication(sys.argv)
+    window = ExamListWindow()
+    window.show()
+    sys.exit(app.exec_())
