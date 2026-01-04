@@ -3590,9 +3590,9 @@ class ExamWindow(QWidget):
             return True
 
         # 方法3：检查题目ID是否在图片映射中
-        question_id = question.get('id', '')
-        if question_id in self.get_image_mapping():
-            return True
+        # question_id = question.get('id', '')
+        # if question_id in self.get_image_mapping():
+        #     return True
 
         return False
 
