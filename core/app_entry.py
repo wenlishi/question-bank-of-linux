@@ -12,7 +12,7 @@
 # # from core.license_manager import LicenseManager
 # # from core.protection import SoftwareProtector
 # # from core.question_bank import QuestionBank
-# # from ui.new_main_window import NewMainWindow
+# # from ui.new_main_window import MainWindow
 # # from ui.license_dialog import LicenseDialog
 
 # # def check_license():
@@ -60,7 +60,7 @@
 # #     # 黑客无法修改这个文件的字节码来跳过上面的 if
     
 # #     question_bank = QuestionBank()
-# #     window = NewMainWindow(question_bank)
+# #     window = MainWindow(question_bank)
 # #     window.show()
 
 # #     sys.exit(app.exec_())
@@ -85,7 +85,7 @@
 # from core.license_manager import LicenseManager
 # from core.protection import SoftwareProtector
 # from core.question_bank import QuestionBank
-# from ui.new_main_window import NewMainWindow
+# from ui.new_main_window import MainWindow
 # from ui.license_dialog import LicenseDialog
 
 # def check_license():
@@ -171,7 +171,7 @@
 #         question_bank = QuestionBank(license_info)
         
 #         # 创建并显示主窗口
-#         window = NewMainWindow(question_bank)
+#         window = MainWindow(question_bank)
 #         window.show()
 
 #         # 进入事件循环
@@ -204,7 +204,7 @@ from PyQt5.QtCore import QSharedMemory  # 必须导入
 from core.license_manager import LicenseManager
 from core.protection import SoftwareProtector
 from core.question_bank import QuestionBank
-from ui.new_main_window import NewMainWindow
+from ui.main_window import MainWindow
 from ui.license_dialog import LicenseDialog
 
 # 必须在全局定义，防止被垃圾回收
@@ -275,8 +275,8 @@ def run_application():
     # --- 5. 启动主窗口 ---
     try:
         question_bank = QuestionBank(license_info)
-        # 这里的 NewMainWindow 会包含 ExamListWindow
-        window = NewMainWindow(question_bank)
+        # 这里的 MainWindow 会包含 ExamListWindow
+        window = MainWindow(question_bank)
         window.show()
         sys.exit(app.exec_())
     except Exception as e:

@@ -13,7 +13,7 @@ from .exam_list_window import get_exam_list_window
 from .exam_window import ExamWindow
 
 
-class NewMainWindow(QMainWindow):
+class MainWindow(QMainWindow):
     """新的主窗口，管理窗口切换"""
 
     def __init__(self, question_bank=None):
