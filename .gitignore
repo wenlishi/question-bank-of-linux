@@ -403,3 +403,5 @@ build_user_version.bat
 generate_codes.py
 
 simple_generate.py
+
+fix_activation_data.py
