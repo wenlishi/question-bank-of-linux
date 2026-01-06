@@ -3,12 +3,11 @@
 """
 用户进度管理器 - 管理用户做题进度和正确率
 """
-
+import sys
 import json
 import os
 from typing import Dict, List, Any, Optional
 from datetime import datetime
-
 
 class UserProgressManager:
     """用户进度管理器"""
@@ -16,14 +15,25 @@ class UserProgressManager:
     def __init__(self, data_dir: str = "data"):
         """
         初始化用户进度管理器
-
-        Args:
-            data_dir: 数据目录路径
         """
-        self.data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), data_dir)
+        # === 【核心修改开始】 ===
+        # 判断是打包后的环境(frozen)还是开发环境
+        if getattr(sys, 'frozen', False):
+            #如果是打包后的 EXE，基准路径是 EXE 文件所在的目录
+            base_path = os.path.dirname(sys.executable)
+        else:
+            # 如果是 Python 源码运行，基准路径是项目根目录
+            # core/ -> 上一级 -> 项目根目录
+            base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            
+        self.data_dir = os.path.join(base_path, data_dir)
+        # === 【核心修改结束】 ===
+        
         self.progress_file = os.path.join(self.data_dir, "user_progress.json")
 
         # 确保数据目录存在
+        # 这里非常重要：因为打包时我们排除了data目录里的动态文件
+        # 所以第一次运行时，如果EXE旁边没有data文件夹，这里会自动创建它
         if not os.path.exists(self.data_dir):
             os.makedirs(self.data_dir)
 
