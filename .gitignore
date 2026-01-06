@@ -409,3 +409,5 @@ fix_activation_data.py
 core\activation.py
 
 activation_admin.py
+
+activation_dialog.py
