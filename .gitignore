@@ -411,3 +411,5 @@ core\activation.py
 activation_admin.py
 
 activation_dialog.py
+
+core\activation.py
