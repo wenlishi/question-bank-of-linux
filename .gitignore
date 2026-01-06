@@ -391,14 +391,5 @@ public_key.pem
 
 admin/private_key.pem
 
-ui/main_window
 
-test_activation.py
-
-test_new_progress_logic.py
-
-test_window_fix.py
-
-update_exam_scores.py
-
-user_version_main.py
+clear_exam_progress.py
