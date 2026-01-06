@@ -390,3 +390,5 @@ user_version/
 public_key.pem
 
 admin/private_key.pem
+
+ui/main_window
