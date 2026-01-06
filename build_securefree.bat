@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 chcp 65001 >nul
 echo.
 echo ========================================
-echo   题库刷题软件 - 商业发布版打包工具
+echo   极智题典 - 商业发布版打包工具
 echo      (V6 - 核心逻辑分离加密版)
 echo ========================================
 echo.
@@ -97,7 +97,7 @@ REM 所以我们必须手动把 UI 模块和其他核心模块加进去
 
 pyinstaller --onefile ^
   --windowed ^
-  --name="题库刷题软件" ^
+  --name="极智题典" ^
   --clean ^
   --noconfirm ^
   --paths="." ^
@@ -126,21 +126,21 @@ if errorlevel 1 (
 )
 
 REM 移动生成的 exe
-move "dist\题库刷题软件.exe" "..\..\dist\题库刷题软件.exe" >nul
+move "dist\极智题典.exe" "..\..\dist\极智题典.exe" >nul
 cd ..\..
 
 REM --- 6. 验证 ---
 echo.
 echo [6/6] 验证结果...
 
-if exist "dist\题库刷题软件.exe" (
-    for %%F in ("dist\题库刷题软件.exe") do (
+if exist "dist\极智题典.exe" (
+    for %%F in ("dist\极智题典.exe") do (
         set "filesize=%%~zF"
         set /a filesize_mb=!filesize! / 1048576
         
         echo.
         echo =================================================
-        echo    SUCCESS: dist\题库刷题软件.exe 已生成！
+        echo    SUCCESS: dist\极智题典.exe 已生成！
         echo =================================================
         echo 大小: !filesize_mb! MB
         echo 安全策略: 引导壳(main) + 核心加密(AppEntry/QuestionBank)

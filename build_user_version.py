@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-题库刷题软件 - 用户版本打包脚本
+极智题典 - 用户版本打包脚本
 简化版打包工具
 """
 
@@ -56,7 +56,7 @@ def clean_old_files():
         "build",
         "dist",
         "__pycache__",
-        "题库刷题软件.spec"
+        "极智题典.spec"
     ]
 
     for item in files_to_clean:
@@ -80,7 +80,7 @@ def build_exe():
         "pyinstaller",
         "--onefile",           # 打包成单个exe文件
         "--windowed",          # 窗口程序（不显示控制台）
-        "--name=题库刷题软件",  # 输出文件名
+        "--name=极智题典",  # 输出文件名
         "--clean",             # 清理临时文件
         "--noconfirm",         # 不确认覆盖
         # 添加数据文件
@@ -131,14 +131,14 @@ def show_result():
     """显示打包结果"""
     print_header("打包完成")
 
-    exe_path = Path("dist") / "题库刷题软件.exe"
+    exe_path = Path("dist") / "极智题典.exe"
     if exe_path.exists():
         exe_size = exe_path.stat().st_size / (1024*1024)  # MB
         print(f"✓ EXE文件: {exe_path}")
         print(f"✓ 文件大小: {exe_size:.2f} MB")
 
         print("\n下一步操作:")
-        print("1. 测试 dist/题库刷题软件.exe 是否正常运行")
+        print("1. 测试 dist/极智题典.exe 是否正常运行")
         print("2. 将exe文件分发给用户")
         print("3. 使用 admin/activation_admin.py 生成激活码")
         print("4. 将激活码提供给用户")
@@ -147,7 +147,7 @@ def show_result():
 
 def main():
     """主函数"""
-    print_header("题库刷题软件 - 用户版本打包工具")
+    print_header("极智题典 - 用户版本打包工具")
 
     # 检查是否在 user_version 目录
     current_dir = Path.cwd()

@@ -59,7 +59,7 @@ def show_activation_dialog():
 def main():
     """主函数"""
     app = QApplication(sys.argv)
-    app.setApplicationName("题库刷题软件")
+    app.setApplicationName("极智题典")
     app.setOrganizationName("TikuSoft")
 
     # 检查激活状态
@@ -76,7 +76,7 @@ def main():
     window = MainWindow(question_bank)
 
     # 移除用户不需要的功能
-    window.setWindowTitle("题库刷题软件 - 用户版")
+    window.setWindowTitle("极智题典 - 用户版")
 
     sys.exit(app.exec_())
 

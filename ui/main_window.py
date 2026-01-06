@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
 
     def init_ui(self):
         """初始化界面"""
-        self.setWindowTitle("题库刷题软件 - 已激活")
+        self.setWindowTitle("极智题典 - 已激活")
         self.setGeometry(100, 100, 1200, 800)
 
         # 创建中心部件
@@ -1121,7 +1121,7 @@ class MainWindow(QMainWindow):
     def closeEvent(self, event):
         """关闭事件"""
         reply = QMessageBox.question(self, '确认退出',
-                                    '确定要退出题库刷题软件吗？',
+                                    '确定要退出极智题典吗？',
                                     QMessageBox.Yes | QMessageBox.No,
                                     QMessageBox.No)
 

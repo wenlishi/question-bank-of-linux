@@ -1,5 +1,5 @@
 @echo off
-echo 启动题库刷题软件...
+echo 启动极智题典...
 echo.
 
 REM 检查Python是否安装

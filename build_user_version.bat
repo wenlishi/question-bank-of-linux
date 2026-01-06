@@ -2,7 +2,7 @@
 chcp 65001 >nul
 echo.
 echo ========================================
-echo   题库刷题软件 - 用户版本打包工具
+echo   极智题典 - 用户版本打包工具
 echo ========================================
 echo.
 
@@ -52,9 +52,9 @@ if exist "dist" (
     rmdir /s /q dist
 )
 
-if exist "题库刷题软件.spec" (
+if exist "极智题典.spec" (
     echo 清理旧的 spec 文件...
-    del "题库刷题软件.spec"
+    del "极智题典.spec"
 )
 
 echo.
@@ -64,7 +64,7 @@ echo.
 REM PyInstaller 打包命令
 pyinstaller --onefile ^
   --windowed ^
-  --name="题库刷题软件" ^
+  --name="极智题典" ^
   --clean ^
   --noconfirm ^
   --add-data="data;data" ^
@@ -103,17 +103,17 @@ echo ========================================
 echo.
 
 REM 显示生成的文件信息
-if exist "dist\题库刷题软件.exe" (
-    for %%F in ("dist\题库刷题软件.exe") do (
+if exist "dist\极智题典.exe" (
+    for %%F in ("dist\极智题典.exe") do (
         set "filesize=%%~zF"
         set /a filesize_mb=!filesize! / 1048576
-        echo ✓ EXE文件: dist\题库刷题软件.exe
+        echo ✓ EXE文件: dist\极智题典.exe
         echo ✓ 文件大小: !filesize_mb! MB
     )
 
     echo.
     echo 下一步操作:
-    echo 1. 测试 dist\题库刷题软件.exe 是否正常运行
+    echo 1. 测试 dist\极智题典.exe 是否正常运行
     echo 2. 将exe文件分发给用户
     echo 3. 使用 admin\activation_admin.py 生成激活码
     echo 4. 将激活码提供给用户

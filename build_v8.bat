@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 chcp 65001 >nul
 echo.
 echo ========================================
-echo   题库刷题软件 - 商业发布版打包工具
+echo   极智题典 - 商业发布版打包工具
 echo      (V8 - 排除用户数据版)
 echo ========================================
 echo.
@@ -90,7 +90,7 @@ cd dist\staging
 REM 执行打包
 pyinstaller --onefile ^
   --windowed ^
-  --name="题库刷题软件" ^
+  --name="极智题典" ^
   --clean ^
   --noconfirm ^
   --paths="." ^
@@ -123,16 +123,16 @@ echo.
 echo [6/6] 正在提取 EXE 文件...
 cd ..\..
 
-if exist "dist\staging\dist\题库刷题软件.exe" (
+if exist "dist\staging\dist\极智题典.exe" (
     if not exist "dist" mkdir "dist"
-    copy "dist\staging\dist\题库刷题软件.exe" "dist\题库刷题软件.exe" /Y >nul
+    copy "dist\staging\dist\极智题典.exe" "dist\极智题典.exe" /Y >nul
     
     echo.
     echo =================================================
     echo    SUCCESS: 打包成功！(已排除用户数据)
     echo =================================================
     echo.
-    echo 软件位置: dist\题库刷题软件.exe
+    echo 软件位置: dist\极智题典.exe
     echo.
     echo [重要提示]
     echo 软件运行时，会自动在 EXE 旁边创建 data 文件夹

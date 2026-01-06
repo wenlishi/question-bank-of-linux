@@ -50,7 +50,7 @@ class ActivationDialog(QDialog):
         info_text = QTextEdit()
         info_text.setReadOnly(True)
         info_text.setPlainText(
-            "欢迎使用题库刷题软件！\n\n"
+            "欢迎使用极智题典！\n\n"
             "本软件需要激活才能使用。\n\n"
             "激活步骤：\n"
             "1. 购买软件激活码\n"
@@ -113,7 +113,7 @@ class ActivationDialog(QDialog):
         if self.activation_manager.activate_software(activation_code, self.device_id):
             QMessageBox.information(self, "激活成功",
                                    "软件激活成功！\n"
-                                   "现在可以开始使用题库刷题软件。")
+                                   "现在可以开始使用极智题典。")
             self.activated.emit(activation_code)
             self.accept()
         else:
