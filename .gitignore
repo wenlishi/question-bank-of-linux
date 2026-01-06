@@ -395,3 +395,5 @@ admin/private_key.pem
 clear_exam_progress.py
 
 start_admin.bat
+
+start.bat
