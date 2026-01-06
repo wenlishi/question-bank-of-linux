@@ -399,3 +399,5 @@ start_admin.bat
 start.bat
 
 build_user_version.bat
+
+generate_codes.py
