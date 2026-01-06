@@ -397,3 +397,5 @@ clear_exam_progress.py
 start_admin.bat
 
 start.bat
+
+build_user_version.bat
