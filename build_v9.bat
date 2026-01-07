@@ -105,7 +105,7 @@ pyinstaller --onefile ^
   --hidden-import=core.license_manager ^
   --hidden-import=core.protection ^
   --hidden-import=ui ^
-  --hidden-import=ui.new_main_window ^
+  --hidden-import=ui.main_window ^
   --hidden-import=ui.license_dialog ^
   main.py
 
