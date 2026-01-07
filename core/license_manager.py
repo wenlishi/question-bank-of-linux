@@ -4,7 +4,7 @@
 # -*- coding: utf-8 -*-
 """
 core/license_manager.py
-终极防御版：集成 AES 加密文件存储、RSA 签名验证、NTP 对时、防时间回滚
+集成 AES 加密文件存储、RSA 签名验证、NTP 对时、防时间回滚
 """
 
 import os
