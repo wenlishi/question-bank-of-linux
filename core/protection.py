@@ -21,7 +21,7 @@ except ImportError:
 class SoftwareProtector:
     """软件防护器"""
 
-    def __init__(self, app_name="极智题典"):
+    def __init__(self, app_name="极智考典"):
         self.app_name = app_name
         self.start_time = time.time()
         self.obfuscation_key = self._generate_obfuscation_key()

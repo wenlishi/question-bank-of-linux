@@ -19,7 +19,7 @@ class LicenseDialog(QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.license_manager = LicenseManager("极智题典", "TikuSoft")
+        self.license_manager = LicenseManager("极智考典", "TikuSoft")
         self.machine_code = self.license_manager.get_machine_code()
         self.init_ui()
 

@@ -2,7 +2,7 @@
 chcp 65001 >nul
 echo.
 echo ========================================
-echo   极智题典 - 商业级安全打包工具
+echo   极智考典 - 商业级安全打包工具
 echo          (虚拟环境修复版)
 echo ========================================
 echo.
@@ -88,7 +88,7 @@ cd dist\obfuscated
 
 pyinstaller --onefile ^
   --windowed ^
-  --name="极智题典" ^
+  --name="极智考典" ^
   --clean ^
   --noconfirm ^
   --add-data="data;data" ^
@@ -110,21 +110,21 @@ if errorlevel 1 (
 )
 
 REM 将生成的 exe 移动到项目根目录的 dist 下
-move "dist\极智题典.exe" "..\..\dist\极智题典.exe"
+move "dist\极智考典.exe" "..\..\dist\极智考典.exe"
 cd ..\..
 
 REM --- 第六步：验证与完成 ---
 echo.
 echo [6/6] 验证打包结果...
-if exist "dist\极智题典.exe" (
-    for %%F in ("dist\极智题典.exe") do (
+if exist "dist\极智考典.exe" (
+    for %%F in ("dist\极智考典.exe") do (
         set "filesize=%%~zF"
         set /a filesize_mb=!filesize! / 1048576
         echo.
         echo ========================================
         echo          🎉 打包成功！
         echo ========================================
-        echo 输出文件: dist\极智题典.exe
+        echo 输出文件: dist\极智考典.exe
         echo 安全等级: ★★★★★ (PyArmor 混淆 + RSA 签名)
         echo.
     )

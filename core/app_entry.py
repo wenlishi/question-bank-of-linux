@@ -42,7 +42,7 @@ def check_single_instance():
     return True
 
 def check_license():
-    license_manager = LicenseManager("极智题典", "TikuSoft")
+    license_manager = LicenseManager("极智考典", "TikuSoft")
     if license_manager.is_activated():
         return True, license_manager.get_activation_info()
     return False, None
@@ -56,20 +56,20 @@ def show_license_dialog():
 def run_application():
     # 1. 初始化 Qt 应用
     app = QApplication(sys.argv)
-    app.setApplicationName("极智题典")
+    app.setApplicationName("极智考典")
     
     # --- 2. 关键：单实例检测 ---
     if not check_single_instance():
         # 这里使用独立的 QMessageBox，不依赖主窗口
         QMessageBox.warning(None, "程序已运行", 
-                            "极智题典已经在运行中。\n\n"
+                            "极智考典已经在运行中。\n\n"
                             "请在任务栏中查找并打开已运行的窗口。")
         sys.exit(0)
 
     # --- 3. 安全防护检查 (打包环境) ---
     if getattr(sys, 'frozen', False):
         try:
-            protector = SoftwareProtector("极智题典")
+            protector = SoftwareProtector("极智考典")
             time.sleep(random.uniform(0.1, 0.3))
             check_results = protector.run_protection_checks()
             protector.apply_protection_response(check_results)

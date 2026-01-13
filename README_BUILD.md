@@ -1,4 +1,4 @@
-# 极智题典 - 打包指南
+# 极智考典 - 打包指南
 
 ## 文件说明
 
@@ -35,7 +35,7 @@ cd user_version
 pip install -r requirements.txt
 
 # 3. 执行打包命令
-pyinstaller --onefile --windowed --name="极智题典" --add-data="data;data" --add-data="ui;ui" --add-data="core;core" main.py
+pyinstaller --onefile --windowed --name="极智考典" --add-data="data;data" --add-data="ui;ui" --add-data="core;core" main.py
 ```
 
 ## 打包配置说明
@@ -43,7 +43,7 @@ pyinstaller --onefile --windowed --name="极智题典" --add-data="data;data" --
 ### 基本参数
 - `--onefile`：打包成单个exe文件
 - `--windowed`：窗口程序（不显示控制台）
-- `--name="极智题典"`：输出文件名
+- `--name="极智考典"`：输出文件名
 - `--clean`：清理临时文件
 - `--noconfirm`：不确认覆盖
 
@@ -69,9 +69,9 @@ pyinstaller --onefile --windowed --name="极智题典" --add-data="data;data" --
 ## 输出文件
 
 打包完成后，生成的文件位于：
-- `user_version/dist/极智题典.exe` - 主程序文件
+- `user_version/dist/极智考典.exe` - 主程序文件
 - `user_version/build/` - 临时构建文件（可删除）
-- `user_version/极智题典.spec` - PyInstaller配置文件（可删除）
+- `user_version/极智考典.spec` - PyInstaller配置文件（可删除）
 
 ## 依赖要求
 

@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
     def __init__(self, question_bank=None):
         super().__init__()
         self.question_bank = question_bank
-        self.setWindowTitle("极智题典")
+        self.setWindowTitle("极智考典")
         self.setGeometry(100, 100, 1200, 800)
 
         # 1. 创建堆叠窗口作为中心控件
