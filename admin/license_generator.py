@@ -1,6 +1,6 @@
 
 """
-商业版注册机 - 加载固定私钥
+注册机 - 加载固定私钥
 """
 import sys
 import os
@@ -22,7 +22,7 @@ except ImportError:
 class LicenseGenerator(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("商业版注册机 (固定私钥)")
+        self.setWindowTitle("注册机 (固定私钥)")
         self.setGeometry(100, 100, 600, 500)
         
         # 初始化时加载私钥
